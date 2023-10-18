@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm';
 
-export const MongoDataSource = new DataSource({
+export const MongoDBDataSource = new DataSource({
   name: 'default',
   type: 'mongodb',
   authSource: 'admin',
