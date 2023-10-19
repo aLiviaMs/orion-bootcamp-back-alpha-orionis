@@ -3,6 +3,7 @@ import helmet from 'helmet';
 import cors from 'cors';
 import swaggerUI from 'swagger-ui-express';
 import swaggerJSDoc from 'swagger-jsdoc';
+import 'dotenv/config';
 import { MongoDataSource } from './config/database';
 import { swaggerConfig } from './config/swagger';
 import routes from './routes';
