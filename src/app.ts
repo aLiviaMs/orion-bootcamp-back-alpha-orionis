@@ -4,11 +4,11 @@ import cors from 'cors';
 import swaggerUI from 'swagger-ui-express';
 import swaggerJSDoc from 'swagger-jsdoc';
 import 'dotenv/config';
-import { MongoDataSource } from './config/database';
+import { MongoDBDataSource } from './config/database';
 import { swaggerConfig } from './config/swagger';
 import routes from './routes';
 
-MongoDataSource.initialize()
+MongoDBDataSource.initialize()
   .then(() => {
     console.log('Database initialized!');
   })

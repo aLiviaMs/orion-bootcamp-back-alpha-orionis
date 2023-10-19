@@ -35,7 +35,6 @@
     "helmet": "^7.0.0",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^5.9.0",
-    "mysql": "^2.18.1",
     "reflect-metadata": "^0.1.13",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
