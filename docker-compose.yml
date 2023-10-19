@@ -11,7 +11,7 @@ services:
       - .:/app
       - /app/node_modules
     ports:
-      - 8080:4444
+      - 4444:4444
     command: npm run start:dev
     environment:
       NODE_ENV: development
@@ -33,23 +33,6 @@ services:
       - 27017:27017
     volumes:
       - ~/docker/volumes/OrionApi_MongoDB:/data/db
-    networks:
-      - orion-connect
-    logging:
-      driver: none
-  
-  orion-mysql:
-    container_name: orion-mysql
-    image: mysql
-    environment:
-      MYSQL_USER: orion_root
-      MYSQL_PASSWORD: j5m966qp7jiypfda
-      MYSQL_ROOT_PASSWORD: m45ug42qkr5pdzbb
-      MYSQL_DATABASE: orion
-    ports:
-      - 3306:3306
-    volumes:
-      - ~/docker/volumes/OrionApi_MySQL:/var/lib/mysql
     networks:
       - orion-connect
     logging:
