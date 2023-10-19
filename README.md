@@ -26,20 +26,13 @@ npm install
 docker-compose down -v 
 docker-compose up --no-deps --build
 ```
-De modo alternativo, também é possível rodar o projeto nativamente sem o docker, usando os seguintes comandos:
-```sh
-npm run build
-npm run start:dev
-```
-Isso fará com que as portas mudem de *8080* para *4444*.
 OBS: Note que o docker-compose aqui utilizado é diferente da nova api do docker compose (sem hífen). Essa última não foi testada no presente projeto e está sujeita a falhas.
 
 ### Instruções de testes
-Para testar o funcionamento do projeto, após rodar via docker ou de modo nativo, é aconselhável abrir o Swagger UI acessando o seguinte endereço:
-- Para caso de docker, http://localhost:8080/swagger/
-- Para caso nativo, http://localhost:4444/swagger/
+Para testar o funcionamento do projeto, após rodar via docker, é aconselhável abrir o Swagger UI acessando o seguinte endereço:
+- http://localhost:8080/swagger/
 
-Ao abrir a interface, envie uma requisição POST para /login clicando no botão _Try it out_ e em seguida _execute_.
+Ao abrir a interface, envie uma requisição POST para /login clicando no botão _Try it out_ e em seguida _Execute_.
 Usando as informações do usuário de teste:
 ```json
 {
@@ -62,7 +55,7 @@ Aqui já é possível testar com informações erradas, basta modificar o e-mail
 
 Com o token _em mãos_, é possível testar o dashboard. Para isso, na seção de Dashboard clique no cadeado e cole o token de autenticação JWT da mesma forma que veio na resposta, clique em Authorize e depois Close (nota: não é necessário adicionar _Bearer_. Isso é automaticamente anexado pelo Swagger UI).
 
-Agora apenas siga a sequência padrão de Try it out e Execute. O Header Authorize será enviado junto à requisição.
+Agora apenas siga a sequência padrão de Try it out e Execute. O Header Authorization será enviado junto à requisição.
 
 A resposta virá da seguinte forma:
 ```json
