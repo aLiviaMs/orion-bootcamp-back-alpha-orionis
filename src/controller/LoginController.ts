@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { Repository } from 'typeorm';
 import { MongoDBDataSource } from '../config/database';
 import { User } from '../entity/User';
+import jwt from 'jsonwebtoken';
 
 interface LoginRequestBody {
   email: string;
@@ -40,10 +41,16 @@ export class LoginController {
    *             schema:
    *               type: object
    *               properties:
-   *                 id:
+   *                 user:
+   *                   type: object
+   *                   properties:
+   *                     id:
+   *                       type: string
+   *                     email:
+   *                       type: string
+   *                 token:
    *                   type: string
-   *                 email:
-   *                   type: string
+   *                   description: JWT token for user authentication, valid for 2 hours
    *       '401':
    *         description: 'Autenticação falhou'
    *         content:
@@ -53,6 +60,7 @@ export class LoginController {
    *               properties:
    *                 message:
    *                   type: string
+   *                   description: Error message indicating authentication failure
    */
   async login(req: Request, res: Response): Promise<Response> {
     const { email } = req.body as LoginRequestBody;
@@ -60,13 +68,16 @@ export class LoginController {
       MongoDBDataSource.getRepository(User);
     const user: User | undefined = await userRepository.findOne({
       where: { email },
-      select: ['id', 'email']
+      select: ['id', 'email', 'password']
     });
 
     if (!user) {
       return res.status(401).json({ message: 'Autenticação falhou' });
     }
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET as string, {
+      expiresIn: '2h'
+    });
 
-    return res.status(200).json(user);
+    return res.status(200).json({ user: user, token: token });
   }
 }
