@@ -8,5 +8,9 @@ export interface User {
 export interface LoginRequestBody {
   email: string;
   password: string;
+}
+
+export interface ValidatedLoginRequestBody {
   isRememberEnabled: boolean;
+  user: User;
 }
