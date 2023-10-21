@@ -1,4 +1,5 @@
 import express from 'express';
+import helmet from 'helmet';
 import cors from 'cors';
 import swaggerUI from 'swagger-ui-express';
 import swaggerJSDoc from 'swagger-jsdoc';
@@ -16,6 +17,7 @@ MongoDBDataSource.initialize()
 
 const app = express();
 
+app.use(helmet());
 app.use(express.json());
 app.use(cors({ origin: true }));
 app.use(routes);
