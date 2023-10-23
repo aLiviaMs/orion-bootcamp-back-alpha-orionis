@@ -1,6 +1,7 @@
 import { comparePasswords, findOne } from '../utils/auth';
 import { Request, Response, NextFunction } from 'express';
-import { User, LoginRequestBody } from '../types/User';
+import { LoginRequestBody } from '../types/User';
+import { User } from 'entity/User';
 
 export const validateLogin = async (
   req: Request,
