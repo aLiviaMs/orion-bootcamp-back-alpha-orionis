@@ -1,7 +1,7 @@
+import { User } from './../entity/User';
 import bcrypt from 'bcrypt';
 import jwt, { JwtPayload } from 'jsonwebtoken';
-
-import { User } from '../types/User';
+import { MongoDBDataSource } from 'config/database';
 
 /**
  * Cria o hash de autenticação do usuário
@@ -65,21 +65,19 @@ export const comparePasswords = async (
   hash: string
 ): Promise<boolean> => bcrypt.compare(password, hash);
 
-//@TODO: Remova - função de teste
-export const findOne = ({
+export const findOne = async ({
   where: { email }
 }: {
   where: { email: string };
 }): Promise<User> => {
-  return new Promise((resolve, reject) => {
-    if (email === 'email@domain.com') {
-      resolve({
-        id: 'bec36603-5f6b-4430-ba83-e5fe6a4d0989',
-        email: 'email@domain.com',
-        password: '$2b$12$un44BpeTTyJQKrhf9K3xpuCKtyjvGQx2Aogt2QNkf0LZPgg3M9wdm' // 123456
-      });
-    }
-
-    reject({ erro: 'Usuário não encontrado.' });
-  });
+  try {
+    const UserRepository = MongoDBDataSource.getRepository(User);
+    const searchedUser: User = await UserRepository.findOne({
+      where: { email },
+      select: ['id', 'email', 'password']
+    });
+    return searchedUser;
+  } catch (error) {
+    throw new Error(error);
+  }
 };

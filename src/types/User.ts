@@ -1,9 +1,4 @@
-export interface User {
-  id: string;
-  name?: string;
-  email: string;
-  password: string;
-}
+import { User } from '../entity/User';
 
 export interface LoginRequestBody {
   email: string;
