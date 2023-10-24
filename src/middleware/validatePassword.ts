@@ -17,7 +17,7 @@ export const validatePassword = async (
     });
   }
 
-  // Senha muito grandes podem ser muito dispendiosas e causar Regular Expression Denial of Service
+  // Senhas muito grandes podem ser muito dispendiosas e causar Regular Expression Denial of Service
   if (password.length > 1000) {
     return res.status(400).json({
       status: false,
