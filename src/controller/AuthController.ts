@@ -22,7 +22,12 @@ export class AuthController {
    *                 example: "email@domain.com"
    *               password:
    *                 type: string
-   *                 example: "123456"
+   *                 example: "Senh@Fort3"
+   *               isRememberEnabled:
+   *                 required: false
+   *                 type: boolean
+   *                 example: true
+   *                 description: Se o usuário deseja permanecer logado
    *     responses:
    *       '200':
    *         description: Requisição realizada com sucesso
