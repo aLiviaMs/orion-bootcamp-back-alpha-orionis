@@ -1,7 +1,7 @@
 import { User } from './../entity/User';
 import bcrypt from 'bcrypt';
 import jwt, { JwtPayload } from 'jsonwebtoken';
-import { MongoDBDataSource } from 'config/database';
+import { MongoDBDataSource } from '../config/database';
 
 /**
  * Cria o hash de autenticação do usuário
