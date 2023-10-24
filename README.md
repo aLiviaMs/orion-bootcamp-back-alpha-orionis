@@ -29,7 +29,51 @@ docker-compose up --no-deps --build
 OBS: Note que o docker-compose aqui utilizado é diferente da nova api do docker compose (sem hífen). Essa última não foi testada no presente projeto e está sujeita a falhas.
 
 ### Instruções de testes
-Para testar o funcionamento do projeto, após rodar via docker, é aconselhável abrir o Swagger UI acessando o seguinte endereço:
+Para testar o funcionamento do projeto, após rodar ```docker-compose up```, é necessário criar um usuário de teste no banco de dados.
+
+Para isso, acesse o container do MongoDB com o seguinte comando:
+```sh
+docker exec -it orion-mongo bash
+```
+
+Em seguida, acesse o mongo passando a string de conexão:
+```sh
+mongosh "mongodb://orion_root:j5m966qp7jiypfda@orion-mongo:27017"
+```
+
+No terminal do mongo, certifique-se de que existe um banco de dados chamado orion.
+```sh
+show dbs
+```
+
+Mude para o banco de dados orion:
+```sh
+use orion
+```
+
+Insira o usuário de teste:
+```js
+db.user.insertOne({ email: 'email@domain.com', password: '$2a$12$Jw.9z6xXEq9m3ZlbcJHhC.pM8IvqPrafcgdcqD2giP10A62cT/PAa' })
+```
+Em que password é o hash de _Senh@Fort3_
+
+Uma mensagem de sucesso será exibida no seguinte formato:
+```js
+{
+  acknowledged: true,
+  insertedId: ObjectId("65373ab57e60fb5be45baf9")
+}
+```
+
+OBS: Lembre-se que o mongo é case-sensitive, escreva _user_ com letras minúsculas.
+
+Feito isso, já é possível sair do mongo e do container:
+```sh
+exit # sair do mongosh
+exit # sair do container 
+```
+
+Após inserir o usuário teste no banco de dados, é aconselhável abrir o Swagger UI acessando o seguinte endereço:
 - http://localhost:8080/swagger/
 
 Ao abrir a interface, envie uma requisição POST para /login clicando no botão _Try it out_ e em seguida _Execute_.
@@ -37,10 +81,11 @@ Usando as informações do usuário de teste:
 ```json
 {
   "email": "email@domain.com",
-  "password": "123456"
+  "password": "Senh@Fort3",
+  "isRememberEnabled": true
 }
 ```
-Será gerado o token JWT que virá na resposta no seguinte formato:
+Será gerado o token JWT, que virá na resposta no seguinte formato:
 ```json
 {
   "status": true,
@@ -49,7 +94,7 @@ Será gerado o token JWT que virá na resposta no seguinte formato:
   }
 }
 ```
-Guarde este token em um bloco de notas para uso posterior. Ele terá validade de 2 horas.
+Guarde este token em um bloco de notas para uso posterior. Ele terá validade de 48 horas caso o parâmetro isRememberEnabled seja true, ou 2 horas caso seja false ou não exista.
 
 Aqui já é possível testar com informações erradas, basta modificar o e-mail ou senha para checar as respectivas repostas de e-mail ou senha errados.
 
