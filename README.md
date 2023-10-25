@@ -28,6 +28,18 @@ docker-compose up --no-deps --build
 ```
 OBS: Note que o docker-compose aqui utilizado é diferente da nova api do docker compose (sem hífen). Essa última não foi testada no presente projeto e está sujeita a falhas.
 
+### Migration no Banco de Dados
+Para criar um seed(propagador) no banco de dados execute o seguinte comando:
+```sh
+npx typeorm migration:create src/migrations/NAME.ts
+```
+Ao executar o comando, um novo arquivo .ts será gerado no diretório especificado com um esqueleto básico para a migração. Você deverá preencher este arquivo com os detalhes da migração. Cada migração possui dois métodos principais: up e down. O método up é usado para aplicar as alterações ao banco de dados, enquanto o método down é usado para desfazer as alterações.
+
+#### Parâmetros
+- src/migrations/: Este é o diretório onde a migração será criada. É padrão armazenar todas as migrações dentro de uma pasta migrations no diretório src.
+
+- NAME.ts: Este é o nome do arquivo da migração. Substitua NAME pelo nome desejado para a sua migração. O nome deve ser descritivo, indicando a finalidade da migração (por exemplo, CreateUsersTable.ts).
+
 ### Instruções de testes
 Para testar o funcionamento do projeto, após rodar via docker, é aconselhável abrir o Swagger UI acessando o seguinte endereço:
 - http://localhost:8080/swagger/
