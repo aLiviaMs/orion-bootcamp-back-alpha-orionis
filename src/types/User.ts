@@ -9,3 +9,18 @@ export interface ValidatedLoginRequestBody {
   isRememberEnabled: boolean;
   user: User;
 }
+
+export interface TransportOptions {
+  host?: string;
+  port?: number;
+  service?: string;
+  auth: Auth;
+}
+
+interface Auth {
+  user: string;
+  pass: string;
+  clientId?: string;
+  clientSecret?: string;
+  refreshToken?: string;
+}
