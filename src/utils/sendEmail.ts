@@ -1,11 +1,16 @@
 import nodemailer, { SendMailOptions, SentMessageInfo } from 'nodemailer';
 import { TransportOptions } from '../types/User';
+import fs from 'fs';
+import path from 'path';
+
+const emailTemplatePath = path.join(__dirname, 'emailTemplates', 'index.html');
+const emailContent = fs.readFileSync(emailTemplatePath, 'utf-8');
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: process.env.MAIL_USER,
-    pass: process.env.MAIL_PASSWORD,
+    user: 'alphaorionisservice@gmail.com',
+    pass: 'rqayhdwhbmozbhpf',
     clientId: process.env.OAUTH_CLIENTID,
     clientSecret: process.env.OAUTH_CLIENT_SECRET,
     refreshToken: process.env.OAUTH_REFRESH_TOKEN
@@ -16,14 +21,10 @@ const transporter = nodemailer.createTransport({
 
 export const sendEmail = async (email: string): Promise<void> => {
   const mailOptions: SendMailOptions = {
-    from: 'alphaorionismain@gmail.com',
+    from: 'alphaorionisservice@gmail.com',
     to: email,
     subject: 'Explorador Orion - Recuperação de Senha',
-    html: `<p>Olá!
-Estamos prontos para ajudá-lo a recuperar o acesso à sua conta no sistema Explorador Orion. Basta clicar no [link] abaixo para redefinir sua senha. Nossos amigáveis marcianos estão ansiosos para recebê-lo de volta ao site!
-Atenciosamente,
-Suporte Explorador Orion
-</p>`
+    html: await emailContent
   };
 
   await transporter.sendMail(
