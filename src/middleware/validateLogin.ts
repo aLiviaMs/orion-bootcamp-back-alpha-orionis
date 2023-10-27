@@ -32,7 +32,7 @@ export const validateLogin = async (
       });
     }
 
-    req.body.user = user;
+    req.body.user ??= user;
   } catch (_err) {
     return res.status(400).json({
       status: false,
