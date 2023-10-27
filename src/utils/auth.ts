@@ -2,6 +2,7 @@ import { User } from './../entity/User';
 import bcrypt from 'bcrypt';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { MongoDBDataSource } from '../config/database';
+import { ObjectId, Repository } from 'typeorm';
 
 /**
  * Cria o hash de autenticação do usuário
@@ -13,7 +14,7 @@ export const createJTW = (user: User, isRememberEnabled: boolean): string => {
   const expiry: string = isRememberEnabled ? '48h' : '2h';
   const token: string = jwt.sign(
     {
-      id: user.id,
+      id: user._id,
       email: user.email
     },
     process.env.JWT_SECRET,
@@ -44,7 +45,7 @@ export const validateJWT = (token: string): boolean => {
 };
 
 /**
- * Compara a senha informada com o hash da senha do usuário
+ * Cria o hash da senha informada
  * @param password Senha informada
  * @returns O hash da senha informada
  */
@@ -65,6 +66,12 @@ export const comparePasswords = async (
   hash: string
 ): Promise<boolean> => bcrypt.compare(password, hash);
 
+/**
+ * Busca um usuário no banco de dados a partir do email
+ * @param where Objeto com o email do usuário
+ * @returns O usuário encontrado
+ * @throws Se ocorrer algum erro ao buscar o usuário
+ */
 export const findOne = async ({
   where: { email }
 }: {
@@ -74,10 +81,10 @@ export const findOne = async ({
     const UserRepository = MongoDBDataSource.getRepository(User);
     const searchedUser: User = await UserRepository.findOne({
       where: { email },
-      select: ['id', 'email', 'password']
+      select: ['_id', 'email', 'password']
     });
     return searchedUser;
   } catch (error) {
-    throw new Error(error);
+    return null;
   }
 };
