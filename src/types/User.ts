@@ -9,3 +9,10 @@ export interface ValidatedLoginRequestBody {
   isRememberEnabled: boolean;
   user: User;
 }
+
+export interface ResetPasswordRequestBody {
+  id: string;
+  resetToken: string;
+  password: string;
+  confirmPassword: string;
+}
