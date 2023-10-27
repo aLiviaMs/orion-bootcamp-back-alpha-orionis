@@ -9,8 +9,8 @@ const emailContent = fs.readFileSync(emailTemplatePath, 'utf-8');
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'alphaorionisservice@gmail.com',
-    pass: 'rqayhdwhbmozbhpf',
+    user: process.env.MAIL_USER,
+    pass: process.env.MAIL_PASSWORD,
     clientId: process.env.OAUTH_CLIENTID,
     clientSecret: process.env.OAUTH_CLIENT_SECRET,
     refreshToken: process.env.OAUTH_REFRESH_TOKEN
