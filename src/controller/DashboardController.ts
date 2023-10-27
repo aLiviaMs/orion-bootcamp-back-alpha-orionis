@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
-import { User } from '../types/User';
+import { User } from '../entity/User';
 
 export class DashboardController {
   /**
@@ -47,7 +47,7 @@ export class DashboardController {
    *                       type: string
    *                       example: "Erro ao obter dados do usuário a partir do token."
    */
-  public greet(req: Request, res: Response): Response {
+  greet = (req: Request, res: Response): Response => {
     try {
       const [, token] = req.headers.authorization?.split(' ');
       const user = jwt.verify(token, process.env.JWT_SECRET) as User;
@@ -67,5 +67,5 @@ export class DashboardController {
         }
       });
     }
-  }
+  };
 }
