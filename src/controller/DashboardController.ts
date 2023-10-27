@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
-import { User } from '../types/User';
-
+import { User } from 'entity/User';
 export class DashboardController {
   /**
    * @swagger
