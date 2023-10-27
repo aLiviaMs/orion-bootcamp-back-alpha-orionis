@@ -10,22 +10,19 @@ import { validatePassword } from './middleware/validatePassword';
 import { searchEmail } from './middleware/searchEmail';
 import { searchID } from './middleware/searchID';
 import { verifyResetToken } from './middleware/verifyResetToken';
+import { validateEmail } from './middleware/validateEmail';
 
 const router = Router();
 
 router.get('/', new HomeController().info);
 
-router.post(
-  '/login',
-  validatePassword,
-  validateLogin,
-  new AuthController().login
-);
+router.post('/login', validateEmail, validateLogin, new AuthController().login);
 
 router.get('/dashboard', jwtMiddleware, new DashboardController().greet);
 
 router.post(
   '/forgot-password',
+  validateEmail,
   searchEmail,
   new ForgotPasswordController().forgotPassword
 );

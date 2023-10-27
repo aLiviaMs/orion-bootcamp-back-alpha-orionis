@@ -16,3 +16,25 @@ export interface ResetPasswordRequestBody {
   password: string;
   confirmPassword: string;
 }
+
+export interface TransportOptions {
+  host?: string;
+  port?: number;
+  service?: string;
+  auth: Auth;
+}
+
+interface Auth {
+  user: string;
+  pass: string;
+  clientId?: string;
+  clientSecret?: string;
+  refreshToken?: string;
+}
+
+export interface StatusResponse {
+  status: boolean;
+  data: {
+    message: string;
+  };
+}

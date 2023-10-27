@@ -1,4 +1,4 @@
-import { createJTW } from '../utils/auth';
+import { createJWT } from '../utils/auth';
 import { Request, Response } from 'express';
 import { ValidatedLoginRequestBody } from '../types/User';
 
@@ -59,7 +59,7 @@ export class AuthController {
 
   login = async (req: Request, res: Response): Promise<Response> => {
     const { user, isRememberEnabled } = req.body as ValidatedLoginRequestBody;
-    const token: string = createJTW(user, isRememberEnabled);
+    const token: string = createJWT(user, isRememberEnabled);
 
     return res.status(200).json({
       status: true,
