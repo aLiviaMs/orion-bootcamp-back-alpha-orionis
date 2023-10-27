@@ -7,8 +7,9 @@
   "scripts": {
     "start:dev": "npx nodemon -L",
     "build": "npm run lint && npx tsc",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --ignore-pattern **/migrations/*.ts",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "migration:seed": "npx typeorm migration:create src/migrations/seed_%npm_config_name%"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.1",

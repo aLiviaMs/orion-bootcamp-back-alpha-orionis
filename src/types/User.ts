@@ -10,6 +10,7 @@ export interface ValidatedLoginRequestBody {
   user: User;
 }
 
+
 export interface TransportOptions {
   host?: string;
   port?: number;
@@ -24,3 +25,9 @@ interface Auth {
   clientSecret?: string;
   refreshToken?: string;
 }
+
+export interface StatusResponse {
+  status: boolean;
+  data: {
+    message: string;
+  }
