@@ -13,8 +13,8 @@ export const createJWT = (user: User, isRememberEnabled: boolean): string => {
   const expiry: string = isRememberEnabled ? '48h' : '2h';
   const token: string = jwt.sign(
     {
-      id: user._id,
-      email: user.email
+      id: user?._id,
+      email: user?.email
     },
     process.env.JWT_SECRET,
     {
@@ -39,6 +39,7 @@ export const validateJWT = (token: string): boolean => {
 
     return !!payload;
   } catch (_err) {
+    console.log(_err);
     return false;
   }
 };

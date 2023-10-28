@@ -21,7 +21,7 @@ export const validateLogin = async (
 
   try {
     const user: User = await findOne({ where: { email } });
-    const isValidPassword = await comparePasswords(password, user.password);
+    const isValidPassword = await comparePasswords(password, user?.password);
 
     if (!isValidPassword) {
       return res.status(400).json({
@@ -34,6 +34,7 @@ export const validateLogin = async (
 
     req.body.user ??= user;
   } catch (_err) {
+    console.log(_err);
     return res.status(400).json({
       status: false,
       data: {
