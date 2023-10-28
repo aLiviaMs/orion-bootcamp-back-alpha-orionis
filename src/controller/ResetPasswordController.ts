@@ -3,9 +3,9 @@ import { User } from '../entity/User';
 import { ResetPasswordRequestBody } from '../types/User';
 import { MongoDBDataSource } from '../config/database';
 import { ObjectId, Repository, UpdateResult } from 'typeorm';
-import { ObjectId as convertToObjectID } from 'mongodb';
 import { hashPassword } from '../utils/auth';
 import { ResetToken } from '../entity/ResetToken';
+import { convertToObjectID } from '../utils/recovery';
 
 export class ResetPasswordController {
   /**
@@ -13,6 +13,8 @@ export class ResetPasswordController {
    * /reset-password/{id}/{resetToken}:
    *   get:
    *     summary: Verifica se o token de recuperação de senha é válido
+   *     tags:
+   *       - Reset Password
    *     description: Verifica se o token de recuperação de senha obtido pelo e-mail é válido
    *     parameters:
    *       - in: path
@@ -53,6 +55,7 @@ export class ResetPasswordController {
    *                 status:
    *                   type: boolean
    *                   description: Status da requisição
+   *                   example: false
    *                 data:
    *                   type: object
    *                   properties:
@@ -69,6 +72,7 @@ export class ResetPasswordController {
    *                 status:
    *                   type: boolean
    *                   description: Status da requisição
+   *                   example: false
    *                 data:
    *                   type: object
    *                   properties:
@@ -77,7 +81,7 @@ export class ResetPasswordController {
    *                       description: Mensagem de erro
    */
   getResetToken = async (req: Request, res: Response): Promise<Response> => {
-    const userID: ObjectId = new convertToObjectID(req.params.id);
+    const userID: ObjectId = convertToObjectID(req.params.id);
     const resetToken: string = req.params.resetToken;
 
     if (!(userID || resetToken)) {
@@ -104,33 +108,29 @@ export class ResetPasswordController {
    * /reset-password:
    *   post:
    *     summary: Mudança de Senha do Usuário
+   *     tags:
+   *       - Reset Password
    *     description: Muda a senha do usuário para a nova senha informada mediante autorização.
    *     consumes:
    *       - application/json
-   *     parameters:
-   *       - in: body
-   *         name: resetPasswordRequest
-   *         description: Objeto contendo o reset token, a nova senha, a repetição da nova senha e o ID do usuário.
-   *         required: true
-   *         schema:
-   *           type: object
-   *           properties:
-   *             resetToken:
-   *               type: string
-   *             password:
-   *               type: string
-   *             confirmPassword:
-   *               type: string
-   *             id:
-   *               type: string
-   *         example:
-   *           id: "65399673418d8f21611cce049"
-   *           resetToken: "tfG3V2v90unUphdzmux8ZyhJkLrnVt2px6wqHta3PHZqBXEYIJ"
-   *           password: "$enh@M41sF@rt&@inda"
-   *           confirmPassword: "$enh@M41sF@rt&@inda"
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               resetToken:
+   *                 type: string
+   *               password:
+   *                 type: string
+   *               confirmPassword:
+   *                 type: string
+   *               id:
+   *                 type: string
    *     responses:
    *       200:
-   *         description: Senha alterada comm sucesso.
+   *         description: Senha alterada com sucesso.
    *         content:
    *           application/json:
    *             schema:
@@ -138,7 +138,7 @@ export class ResetPasswordController {
    *               properties:
    *                 status:
    *                   type: boolean
-   *                   description: Booleano que indica se a requisição foi bem sucedida
+   *                   description: Booleano que indica se a requisição foi bem-sucedida
    *                 data:
    *                   type: object
    *                   properties:
@@ -146,7 +146,7 @@ export class ResetPasswordController {
    *                       type: string
    *                       description: Mensagem de sucesso.
    *       400:
-   *         description: Requisição inválida
+   *         description: Requisição inválida.
    *         content:
    *           application/json:
    *             schema:
@@ -155,12 +155,13 @@ export class ResetPasswordController {
    *                 status:
    *                   type: boolean
    *                   description: Status da requisição
+   *                   example: false
    *                 data:
    *                   type: object
    *                   properties:
    *                     message:
    *                       type: string
-   *                       description: Mensagem de erro
+   *                       description: Mensagem de erro.
    */
   resetPassword = async (req: Request, res: Response): Promise<Response> => {
     const { password, confirmPassword, id } =
@@ -174,7 +175,7 @@ export class ResetPasswordController {
         }
       });
     }
-    const userID: ObjectId = new convertToObjectID(id);
+    const userID: ObjectId = convertToObjectID(id);
 
     try {
       const hashedPassword: string = await hashPassword(password);
@@ -185,7 +186,10 @@ export class ResetPasswordController {
       const updatedUser: UpdateResult | null = await UserRepository.update(
         { _id: userID },
         { password: hashedPassword }
-      ).catch((_err) => null);
+      ).catch((_err) => {
+        console.log(_err);
+        return null;
+      });
 
       if (!updatedUser) {
         return res.status(400).json({
@@ -209,7 +213,10 @@ export class ResetPasswordController {
 
     const deletedResetToken: ResetToken | null = await resetTokenRepository
       .delete({ _id: userID })
-      .catch((_err) => null);
+      .catch((_err) => {
+        console.log(_err);
+        return null;
+      });
 
     if (!deletedResetToken) {
       return res.status(400).json({
