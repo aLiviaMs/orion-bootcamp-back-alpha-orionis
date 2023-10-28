@@ -41,59 +41,15 @@ Ao executar o comando, um novo arquivo .ts será gerado no diretório especifica
 - NAME.ts: Este é o nome do arquivo da migração. Substitua NAME pelo nome desejado para a sua migração. O nome deve ser descritivo, indicando a finalidade da migração (por exemplo, CreateUsersTable.ts).
 
 ### Instruções de testes
-Para testar o funcionamento do projeto, após rodar ```docker-compose up```, é necessário criar um usuário de teste no banco de dados.
-
-Para isso, acesse o container do MongoDB com o seguinte comando:
-```sh
-docker exec -it orion-mongo bash
-```
-
-Em seguida, acesse o mongo passando a string de conexão:
-```sh
-mongosh "mongodb://orion_root:j5m966qp7jiypfda@orion-mongo:27017"
-```
-
-No terminal do mongo, certifique-se de que existe um banco de dados chamado orion.
-```sh
-show dbs
-```
-
-Mude para o banco de dados orion:
-```sh
-use orion
-```
-
-Insira o usuário de teste:
-```js
-db.user.insertOne({ email: 'email@domain.com', password: '$2a$12$Jw.9z6xXEq9m3ZlbcJHhC.pM8IvqPrafcgdcqD2giP10A62cT/PAa' })
-```
-Em que password é o hash de _Senh@Fort3_
-
-Uma mensagem de sucesso será exibida no seguinte formato:
-```js
-{
-  acknowledged: true,
-  insertedId: ObjectId("65373ab57e60fb5be45baf9")
-}
-```
-
-OBS: Lembre-se que o mongo é case-sensitive, escreva _user_ com letras minúsculas.
-
-Feito isso, já é possível sair do mongo e do container:
-```sh
-exit # sair do mongosh
-exit # sair do container 
-```
-
-Após inserir o usuário teste no banco de dados, é aconselhável abrir o Swagger UI acessando o seguinte endereço:
+Para testar o funcionamento do projeto, após rodar ```docker-compose up```, é aconselhável abrir o Swagger UI acessando o seguinte endereço:
 - http://localhost:8080/swagger/
 
 Ao abrir a interface, envie uma requisição POST para /login clicando no botão _Try it out_ e em seguida _Execute_.
-Usando as informações do usuário de teste:
+Usando as informações do usuário:
 ```json
 {
-  "email": "email@domain.com",
-  "password": "Senh@Fort3",
+  "email": "email@dele.aqui",
+  "password": "SenhaDele@qui",
   "isRememberEnabled": true
 }
 ```
@@ -119,7 +75,7 @@ A resposta virá da seguinte forma:
 {
   "status": true,
   "data": {
-    "message": "Olá, email@domain.com!"
+    "message": "Olá, email@dele.aqui!"
   }
 }
 ```
@@ -128,6 +84,59 @@ Onde o e-mail apresentado foi extraído diretamente do token, que carrega por si
 
 Neste ponto também é possível testar tokens inválidos.
 Para usar outro token, acesse o cadeado novamente e aperte Logout, liberando assim espaço para inserção de outro JWT.
+
+Já para testar a seção de _Esqueci a Senha_, basta enviar uma requisição POST para /forgot-password com o e-mail do usuário:
+```json
+{
+  "email": "email@dele.aqui"
+}
+```
+A resposta será:
+```json
+{
+  "status": true,
+  "data": {
+    "message": "E-mail enviado com sucesso!"
+  }
+}
+```
+Onde o e-mail será enviado para o que foi digitado, após validações.
+Um link será enviado para o e-mail do usuário, que ao ser clicado redirecionará para uma página de redefinição de senha.
+
+A validação do token pode ser feita usando o método GET na rota /reset-password/:id/:resetToken, para fins de averiguação de expiração, formato ou validez do token, caso deseje checar antes de mostrar a página de nova senha. O sistema analisa os parâmetros de path, então uma requisição vazia já basta.
+
+Se tudo der certo, a resposta da rota GET será:
+```json
+{
+  "status": true,
+  "data": {
+    "resetToken": "ALEATORIO",
+    "id": "ID_DO_USUARIO"
+  }
+}
+```
+
+Para testar a redefinição de senha, basta enviar uma requisição POST para /reset-password com o token e id do usuário de teste e a nova senha:
+```json
+{
+  "id": "ID_DO_USUARIO",
+  "password": "NovaSenha@qui",
+  "confirmPassword": "NovaSenha@qui",
+  "resetToken": "ALETORIO"
+}
+```
+Onde o resetToken é o token enviado para o e-mail do usuário, assim como o id.
+
+Sua resposta será no formato:
+```json
+{
+  "status": true,
+  "data": {
+    "message": "Senha atualizada com sucesso."
+  }
+}
+```
+
 #### Acessos:
 - URL base: http://localhost:4444
 - Documentação Swagger: http://localhost:4444/swagger
