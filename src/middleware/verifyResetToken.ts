@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import { ObjectId } from 'typeorm';
-import { ObjectId as convertToObjectID } from 'mongodb';
 import { ResetToken } from '../entity/ResetToken';
 import {
+  convertToObjectID,
   findResetTokenByID,
   hashToken,
   isTokenExpired
@@ -13,9 +13,9 @@ export const verifyResetToken = async (
   res: Response,
   next: NextFunction
 ): Promise<Response | void> => {
-  const id: string = req.params.id ?? (req.body.id as string);
+  const id: string = req.params?.id ?? (req.body?.id as string);
   const resetToken: string =
-    req.params.resetToken ?? (req.body.resetToken as string);
+    req.params?.resetToken ?? (req.body?.resetToken as string);
 
   if (!resetToken) {
     return res.status(400).json({
@@ -26,10 +26,13 @@ export const verifyResetToken = async (
     });
   }
 
-  const userID: ObjectId = new convertToObjectID(id);
+  const userID: ObjectId = convertToObjectID(id);
   const resetTokenDB: ResetToken | null = await findResetTokenByID(
     userID
-  ).catch((_err) => null);
+  ).catch((_err) => {
+    console.log(_err);
+    return null;
+  });
 
   if (!resetTokenDB?._id) {
     return res.status(400).json({
