@@ -10,7 +10,6 @@ export interface ValidatedLoginRequestBody {
   user: User;
 }
 
-
 export interface TransportOptions {
   host?: string;
   port?: number;
@@ -30,4 +29,5 @@ export interface StatusResponse {
   status: boolean;
   data: {
     message: string;
-  }
+  };
+}
