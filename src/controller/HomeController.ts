@@ -23,7 +23,7 @@ export class HomeController {
    *                   properties:
    *                     message:
    *                       type: string
-   *                       example: "Acesse a documentação da API em /swagger"
+   *                       example: "Acesse a documentação da API em /swagger.json"
    */
   info = (_req: Request, res: Response) => {
     return res.status(200).json({
