@@ -2,6 +2,7 @@ import crypto from 'crypto';
 import { ObjectId, Repository } from 'typeorm';
 import { ResetToken } from '../entity/ResetToken';
 import { MongoDBDataSource } from '../config/database';
+import { ObjectId as MongoID } from 'mongodb';
 
 /**
  * Gera um token de recuperação de senha e o hash do token.
@@ -68,6 +69,21 @@ export const findResetTokenByID = async (
 };
 
 /**
+ * Converte uma string para um ID do MongoDB.
+ * @param id A string a ser convertida.
+ * @returns O ID do MongoDB ou null se a string não for válida.
+ */
+export const convertToObjectID = (id: string): ObjectId => {
+  try {
+    const userID: ObjectId = new MongoID(id);
+    return userID;
+  } catch (_err) {
+    console.log(_err);
+    return null;
+  }
+};
+
+/**
  * Retorna a data e hora atual em UTC.
  * @returns A data e hora atual em UTC.
  */
@@ -106,41 +122,4 @@ export const isTokenExpired = (resetTokenDB: ResetToken): boolean => {
   const isTokenExpired: boolean = utcNow.getTime() > expirationDate.getTime();
 
   return isTokenExpired;
-};
-
-/**
- * Envia o email de recuperação de senha.
- * @param email Endereço de email do usuário.
- * @param resetToken Token de recuperação de senha.
- * @param userID ID do usuário.
- * @returns Se o email foi enviado ou não.
- */
-export const sendEmail = async (
-  email: string,
-  resetToken: string,
-  userID: ObjectId
-): Promise<boolean> => {
-  const resetURL: string = `${process.env.FRONTEND_URL}/reset-password/${userID}/${resetToken}`;
-
-  const mailOptions = {
-    from: 'nao-responder@exploradororion.com.br',
-    to: email,
-    subject: 'Recuperação de senha',
-    text: `Olá, você solicitou a recuperação de senha. Acesse o link a seguir para redefinir sua senha: ${resetURL}`
-  };
-
-  // fake transport
-  const transport = {
-    sendMail: async (options) => {
-      console.log(options);
-    }
-  };
-
-  await transport.sendMail(mailOptions);
-
-  // importante para ver o link enquanto a função de envio de e-mail real ainda está em construção
-  console.log(`Email de recuperação de senha enviado para ${email}.`);
-  console.log(`Link de recuperação de senha: ${resetURL}`);
-
-  return true;
 };
