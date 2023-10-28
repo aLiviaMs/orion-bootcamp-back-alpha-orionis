@@ -5,9 +5,10 @@ import { MongoDBDataSource } from '../config/database';
 import { Repository } from 'typeorm';
 import {
   createResetTokenDBObject,
-  generateResetTokenAndHash,
-  sendEmail
+  generateResetTokenAndHash
 } from '../utils/recovery';
+import { sendEmail } from '../utils/email';
+import { composeResetEmailContent } from '../utils/emailTemplates/resetPasswordEmailContent';
 
 export class ForgotPasswordController {
   /**
@@ -15,21 +16,20 @@ export class ForgotPasswordController {
    * /forgot-password:
    *   post:
    *     summary: E-mail de redefinição de senha
+   *     tags:
+   *       - Forgot Password
    *     description: Envia o e-mail contendo o link com token de autorização de mudança de senha para o usuário correspondente.
    *     consumes:
    *       - application/json
-   *     parameters:
-   *       - in: body
-   *         name: forgotPasswordRequest
-   *         description: Objeto JSON contendo o endereço de e-mail do usuário.
-   *         required: true
-   *         schema:
-   *           type: object
-   *           properties:
-   *             email:
-   *               type: string
-   *           example:
-   *             email: "email@domain.com"
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               email:
+   *                 type: string
    *     responses:
    *       200:
    *         description: E-mail de redefinição de senha enviado com sucesso.
@@ -57,6 +57,7 @@ export class ForgotPasswordController {
    *                 status:
    *                   type: boolean
    *                   description: Status da requisição
+   *                   example: false
    *                 data:
    *                   type: object
    *                   properties:
@@ -73,12 +74,15 @@ export class ForgotPasswordController {
 
     const resetTokenDBObject: ResetToken = createResetTokenDBObject(
       resetHash,
-      user._id
+      user?._id
     );
 
     const savedResetToken: ResetToken | null = await resetTokenRepository
       .save(resetTokenDBObject)
-      .catch((_err) => null);
+      .catch((_err) => {
+        console.log(_err);
+        return null;
+      });
 
     if (!savedResetToken) {
       return res.status(400).json({
@@ -89,8 +93,10 @@ export class ForgotPasswordController {
       });
     }
 
-    const email: string = user.email;
-    const wasEmailSent: boolean = await sendEmail(email, resetToken, user._id);
+    const email: string = user?.email;
+    const resetURL: string = `${process.env.FRONTEND_URL}/reset-password/${user?._id}/${resetToken}`;
+    const emailContent: string = composeResetEmailContent(resetURL);
+    const wasEmailSent: boolean = await sendEmail(email, emailContent);
 
     if (!wasEmailSent) {
       return res.status(400).json({
