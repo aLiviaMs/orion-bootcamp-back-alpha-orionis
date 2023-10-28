@@ -40,12 +40,29 @@ export class DashboardController {
    *               properties:
    *                 status:
    *                   type: boolean
+   *                   example: false
    *                 data:
    *                   type: object
    *                   properties:
    *                     message:
    *                       type: string
    *                       example: "Erro ao obter dados do usuário a partir do token."
+   *       '401':
+   *         description: 'Token de autenticação inválido'
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 status:
+   *                   type: boolean
+   *                   example: false
+   *                 data:
+   *                   type: object
+   *                   properties:
+   *                     message:
+   *                       type: string
+   *                       example: "Token inválido."
    */
   greet = (req: Request, res: Response): Response => {
     try {
@@ -60,6 +77,7 @@ export class DashboardController {
         }
       });
     } catch (_err) {
+      console.log(_err);
       return res.status(400).json({
         status: false,
         data: {
