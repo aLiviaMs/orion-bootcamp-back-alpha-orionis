@@ -37,7 +37,7 @@ export const validatePassword = async (
     const weakPasswordErrorMessage: string = `A senha deve ter no mínimo 8 caracteres, 1 letra maiúscula, \
 1 número, e 1 caractere especial dentre os seguintes: !@#$%^&;:{}|<>*\\()'"-_+.`;
 
-    return res.json({
+    return res.status(400).json({
       status: false,
       data: {
         message: weakPasswordErrorMessage
