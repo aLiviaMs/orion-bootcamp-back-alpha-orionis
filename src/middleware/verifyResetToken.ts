@@ -30,7 +30,6 @@ export const verifyResetToken = async (
   const resetTokenDB: ResetToken | null = await findResetTokenByID(
     userID
   ).catch((_err) => {
-    console.log(_err);
     return null;
   });
 

@@ -39,7 +39,6 @@ export const validateJWT = (token: string): boolean => {
 
     return !!payload;
   } catch (_err) {
-    console.log(_err);
     return false;
   }
 };

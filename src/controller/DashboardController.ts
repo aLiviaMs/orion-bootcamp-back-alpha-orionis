@@ -77,7 +77,6 @@ export class DashboardController {
         }
       });
     } catch (_err) {
-      console.log(_err);
       return res.status(400).json({
         status: false,
         data: {

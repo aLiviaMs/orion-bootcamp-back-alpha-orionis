@@ -32,7 +32,6 @@ export const searchEmail = async (
 
     req.body.user ??= user;
   } catch (_err) {
-    console.log(_err);
     return res.status(400).json({
       status: false,
       data: {

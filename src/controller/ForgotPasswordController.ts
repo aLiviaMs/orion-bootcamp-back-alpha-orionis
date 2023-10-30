@@ -80,7 +80,6 @@ export class ForgotPasswordController {
     const savedResetToken: ResetToken | null = await resetTokenRepository
       .save(resetTokenDBObject)
       .catch((_err) => {
-        console.log(_err);
         return null;
       });
 

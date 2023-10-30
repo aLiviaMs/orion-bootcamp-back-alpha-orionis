@@ -187,7 +187,6 @@ export class ResetPasswordController {
         { _id: userID },
         { password: hashedPassword }
       ).catch((_err) => {
-        console.log(_err);
         return null;
       });
 
@@ -214,7 +213,6 @@ export class ResetPasswordController {
     const deletedResetToken: ResetToken | null = await resetTokenRepository
       .delete({ _id: userID })
       .catch((_err) => {
-        console.log(_err);
         return null;
       });
 
