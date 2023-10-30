@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { HomeController } from './controller/HomeController';
+import { IndexController } from './controller/IndexController';
 import { AuthController } from './controller/AuthController';
 import { DashboardController } from './controller/DashboardController';
 import { ForgotPasswordController } from './controller/ForgotPasswordController';
@@ -14,7 +14,7 @@ import { validateEmail } from './middleware/validateEmail';
 
 const router = Router();
 
-router.get('/', new HomeController().info);
+router.get('/', new IndexController().info);
 
 router.post('/login', validateEmail, validateLogin, new AuthController().login);
 
