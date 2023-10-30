@@ -45,8 +45,7 @@ export const createResetTokenDBObject = (
   const resetTokenDBObject: ResetToken = new ResetToken();
   resetTokenDBObject.hash = resetHash;
   resetTokenDBObject._id = userID;
-
-  resetTokenDBObject.createdAt = getUTCDate();
+  resetTokenDBObject.createdAt = new Date();
 
   return resetTokenDBObject;
 };
@@ -78,20 +77,8 @@ export const convertToObjectID = (id: string): ObjectId => {
     const userID: ObjectId = new MongoID(id);
     return userID;
   } catch (_err) {
-    console.log(_err);
     return null;
   }
-};
-
-/**
- * Retorna a data e hora atual em UTC.
- * @returns A data e hora atual em UTC.
- */
-export const getUTCDate = (): Date => {
-  const utcString = new Date().toISOString();
-  const utcDate = new Date(utcString);
-
-  return utcDate;
 };
 
 /**
@@ -118,7 +105,7 @@ export const getExpirationDate = (
  */
 export const isTokenExpired = (resetTokenDB: ResetToken): boolean => {
   const expirationDate: Date = getExpirationDate(1, resetTokenDB.createdAt);
-  const utcNow: Date = getUTCDate();
+  const utcNow: Date = new Date();
   const isTokenExpired: boolean = utcNow.getTime() > expirationDate.getTime();
 
   return isTokenExpired;
