@@ -11,6 +11,7 @@ import { searchEmail } from './middleware/searchEmail';
 import { searchID } from './middleware/searchID';
 import { verifyResetToken } from './middleware/verifyResetToken';
 import { validateEmail } from './middleware/validateEmail';
+import { WeatherController } from './controller/WeatherController';
 
 const router = Router();
 
@@ -19,6 +20,51 @@ router.get('/', new IndexController().info);
 router.post('/login', validateEmail, validateLogin, new AuthController().login);
 
 router.get('/dashboard', jwtMiddleware, new DashboardController().greet);
+router.get('/weather', jwtMiddleware, new WeatherController().getWeatherData);
+
+router.post(
+  '/forgot-password',
+  validateEmail,
+  searchEmail,
+  new ForgotPasswordController().forgotPassword
+);
+
+router.get(
+  '/reset-password/:id/:resetToken',
+  searchID,
+  verifyResetToken,
+  new ResetPasswordController().getResetToken
+);
+
+router.post(
+  '/reset-password',
+  validatePassword,
+  searchID,
+  verifyResetToken,
+  new ResetPasswordController().resetPassword
+);
+
+router.post(
+  '/forgot-password',
+  validateEmail,
+  searchEmail,
+  new ForgotPasswordController().forgotPassword
+);
+
+router.get(
+  '/reset-password/:id/:resetToken',
+  searchID,
+  verifyResetToken,
+  new ResetPasswordController().getResetToken
+);
+
+router.post(
+  '/reset-password',
+  validatePassword,
+  searchID,
+  verifyResetToken,
+  new ResetPasswordController().resetPassword
+);
 
 router.post(
   '/forgot-password',
