@@ -41,18 +41,19 @@ Ao executar o comando, um novo arquivo .ts será gerado no diretório especifica
 - NAME.ts: Este é o nome do arquivo da migração. Substitua NAME pelo nome desejado para a sua migração. O nome deve ser descritivo, indicando a finalidade da migração (por exemplo, CreateUsersTable.ts).
 
 ### Instruções de testes
-Para testar o funcionamento do projeto, após rodar via docker, é aconselhável abrir o Swagger UI acessando o seguinte endereço:
+Para testar o funcionamento do projeto, após rodar ```docker-compose up```, é aconselhável abrir o Swagger UI acessando o seguinte endereço:
 - http://localhost:8080/swagger/
 
 Ao abrir a interface, envie uma requisição POST para /login clicando no botão _Try it out_ e em seguida _Execute_.
-Usando as informações do usuário de teste:
+Usando as informações do usuário:
 ```json
 {
-  "email": "email@domain.com",
-  "password": "123456"
+  "email": "email@dele.aqui",
+  "password": "SenhaDele@qui",
+  "isRememberEnabled": true
 }
 ```
-Será gerado o token JWT que virá na resposta no seguinte formato:
+Será gerado o token JWT, que virá na resposta no seguinte formato:
 ```json
 {
   "status": true,
@@ -61,7 +62,7 @@ Será gerado o token JWT que virá na resposta no seguinte formato:
   }
 }
 ```
-Guarde este token em um bloco de notas para uso posterior. Ele terá validade de 2 horas.
+Guarde este token em um bloco de notas para uso posterior. Ele terá validade de 48 horas caso o parâmetro isRememberEnabled seja true, ou 2 horas caso seja false ou não exista.
 
 Aqui já é possível testar com informações erradas, basta modificar o e-mail ou senha para checar as respectivas repostas de e-mail ou senha errados.
 
@@ -74,7 +75,7 @@ A resposta virá da seguinte forma:
 {
   "status": true,
   "data": {
-    "message": "Olá, email@domain.com!"
+    "message": "Olá, email@dele.aqui!"
   }
 }
 ```
@@ -83,6 +84,7 @@ Onde o e-mail apresentado foi extraído diretamente do token, que carrega por si
 
 Neste ponto também é possível testar tokens inválidos.
 Para usar outro token, acesse o cadeado novamente e aperte Logout, liberando assim espaço para inserção de outro JWT.
+
 #### Acessos:
 - URL base: http://localhost:4444
 - Documentação Swagger: http://localhost:4444/swagger

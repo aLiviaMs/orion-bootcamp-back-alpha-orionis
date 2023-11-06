@@ -10,6 +10,13 @@ export interface ValidatedLoginRequestBody {
   user: User;
 }
 
+export interface ResetPasswordRequestBody {
+  id: string;
+  resetToken: string;
+  password: string;
+  confirmPassword: string;
+}
+
 export interface TransportOptions {
   host?: string;
   port?: number;

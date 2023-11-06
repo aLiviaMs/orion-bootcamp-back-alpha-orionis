@@ -1,10 +1,5 @@
 import nodemailer, { SendMailOptions, SentMessageInfo } from 'nodemailer';
 import { TransportOptions } from '../types/User';
-import fs from 'fs';
-import path from 'path';
-
-const emailTemplatePath = path.join(__dirname, 'emailTemplates', 'index.html');
-const emailContent = fs.readFileSync(emailTemplatePath, 'utf-8');
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -19,21 +14,24 @@ const transporter = nodemailer.createTransport({
   logger: true
 } as TransportOptions);
 
-export const sendEmail = async (email: string): Promise<void> => {
+export const sendEmail = async (
+  email: string,
+  content: string
+): Promise<boolean> => {
   const mailOptions: SendMailOptions = {
     from: 'alphaorionisservice@gmail.com',
     to: email,
     subject: 'Explorador Orion - Recuperação de Senha',
-    html: await emailContent
+    html: content
   };
 
-  await transporter.sendMail(
-    mailOptions,
-    (err: Error | null, info: SentMessageInfo) => {
-      if (err) {
-        console.log(err);
-      }
-      console.log('Mensagem enviada: ', info?.messageId);
-    }
-  );
+  const sentMessageInfo: SentMessageInfo | null = await transporter
+    .sendMail(mailOptions)
+    .catch((err) => {
+      console.log('Erro durante o envio de e-mail:', err);
+      return null;
+    });
+  const wasEmailSent: boolean = sentMessageInfo?.accepted?.length > 0;
+
+  return wasEmailSent;
 };

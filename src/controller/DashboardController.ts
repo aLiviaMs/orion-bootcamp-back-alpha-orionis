@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
-import { User } from 'entity/User';
+import { User } from '../entity/User';
+
 export class DashboardController {
   /**
    * @swagger
@@ -39,14 +40,31 @@ export class DashboardController {
    *               properties:
    *                 status:
    *                   type: boolean
+   *                   example: false
    *                 data:
    *                   type: object
    *                   properties:
    *                     message:
    *                       type: string
    *                       example: "Erro ao obter dados do usuário a partir do token."
+   *       '401':
+   *         description: 'Token de autenticação inválido'
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 status:
+   *                   type: boolean
+   *                   example: false
+   *                 data:
+   *                   type: object
+   *                   properties:
+   *                     message:
+   *                       type: string
+   *                       example: "Token inválido."
    */
-  public greet(req: Request, res: Response): Response {
+  greet = (req: Request, res: Response): Response => {
     try {
       const [, token] = req.headers.authorization?.split(' ');
       const user = jwt.verify(token, process.env.JWT_SECRET) as User;
@@ -66,5 +84,5 @@ export class DashboardController {
         }
       });
     }
-  }
+  };
 }

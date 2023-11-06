@@ -1,33 +1,31 @@
-import { comparePasswords, findOne } from '../utils/auth';
 import { Request, Response, NextFunction } from 'express';
-import { LoginRequestBody } from '../types/User';
-import { User } from 'entity/User';
+import { findOne } from '../utils/auth';
+import { User } from '../entity/User';
 
-export const validateLogin = async (
+export const searchEmail = async (
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<Response | void> => {
-  const { email, password } = req.body as LoginRequestBody;
+  const email: string = req.body.email;
 
-  if (!email || !password) {
+  if (!email) {
     return res.status(400).json({
       status: false,
       data: {
-        message: 'Email ou senha não informados.'
+        message: 'Email não informado.'
       }
     });
   }
 
   try {
     const user: User = await findOne({ where: { email } });
-    const isValidPassword = await comparePasswords(password, user?.password);
 
-    if (!isValidPassword) {
+    if (!user?._id) {
       return res.status(400).json({
         status: false,
         data: {
-          message: 'A senha digitada está incorreta. Tente novamente.'
+          message: 'Não foi possível encontrar sua conta.'
         }
       });
     }
