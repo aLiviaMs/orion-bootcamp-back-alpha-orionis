@@ -44,4 +44,26 @@ router.post(
   new ResetPasswordController().resetPassword
 );
 
+router.post(
+  '/forgot-password',
+  validateEmail,
+  searchEmail,
+  new ForgotPasswordController().forgotPassword
+);
+
+router.get(
+  '/reset-password/:id/:resetToken',
+  searchID,
+  verifyResetToken,
+  new ResetPasswordController().getResetToken
+);
+
+router.post(
+  '/reset-password',
+  validatePassword,
+  searchID,
+  verifyResetToken,
+  new ResetPasswordController().resetPassword
+);
+
 export default router;
