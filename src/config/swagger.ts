@@ -22,6 +22,74 @@ export const swaggerConfig: swaggerJSDoc.OAS3Options = {
           type: 'http',
           scheme: 'bearer'
         }
+      },
+      schemas: {
+        WeatherCard: {
+          type: 'object',
+          properties: {
+            temperature: {
+              type: 'object',
+              properties: {
+                celsius: {
+                  type: 'object',
+                  properties: {
+                    min: {
+                      type: 'number'
+                    },
+                    max: {
+                      type: 'number'
+                    },
+                    variation: {
+                      type: 'number'
+                    }
+                  }
+                },
+                fahrenheit: {
+                  type: 'object',
+                  properties: {
+                    min: {
+                      type: 'number'
+                    },
+                    max: {
+                      type: 'number'
+                    },
+                    variation: {
+                      type: 'number'
+                    }
+                  }
+                }
+              }
+            },
+            terrestrialDate: {
+              type: 'string'
+            },
+            solDate: {
+              type: 'number'
+            }
+          }
+        },
+        WeatherData: {
+          type: 'object',
+          properties: {
+            weatherCards: {
+              type: 'array',
+              items: {
+                $ref: '#/components/schemas/WeatherCard'
+              }
+            }
+          }
+        },
+        WeatherResponse: {
+          type: 'object',
+          properties: {
+            status: {
+              type: 'boolean'
+            },
+            data: {
+              $ref: '#/components/schemas/WeatherData'
+            }
+          }
+        }
       }
     }
   },
