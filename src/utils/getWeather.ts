@@ -18,7 +18,7 @@ import {
  *   console.log(data);
  * });
  */
-export const getWeather = async (url: string): Promise<SolData> => {
+export const getWeatherHandler = async (url: string): Promise<SolData> => {
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error(`HTTP Error! Status: ${response.status}`);

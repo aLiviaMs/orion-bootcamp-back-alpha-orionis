@@ -1,6 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
-import { getWeather } from '../utils/getWeather';
+import { getWeatherHandler } from '../utils/getWeather';
 import { SolData } from '../types/ApiResponse';
+declare module 'express' {
+  interface Request {
+    weatherData?: SolData;
+  }
+}
 
 /**
  * Asynchronous middleware to fetch Martian weather data.
@@ -12,7 +17,7 @@ import { SolData } from '../types/ApiResponse';
  * @returns {Promise<void>} - A promise that resolves when the middleware finishes execution.
  */
 
-export const getWeatherData = async (
+export const getWeatherMiddleware = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -20,7 +25,9 @@ export const getWeatherData = async (
   const url =
     'https://mars.nasa.gov/rss/api/?feed=weather&category=msl&feedtype=json' as string;
 
-  await getWeather(url);
+  const weatherData: SolData = await getWeatherHandler(url);
+
+  req.weatherData = weatherData;
 
   next();
 };
