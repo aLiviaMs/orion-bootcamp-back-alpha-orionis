@@ -3,7 +3,9 @@
  * @param temperature_celsius A temperatura em Celsius
  * @returns A temperatura em Fahrenheit
  */
-export const convertCelsiusToFahrenheit = (temperature_celsius: number): number => {
+export const convertCelsiusToFahrenheit = (
+  temperature_celsius: number
+): number => {
   const temperature_fahrenheit: number = (temperature_celsius * 9) / 5 + 32;
   return temperature_fahrenheit;
 };
