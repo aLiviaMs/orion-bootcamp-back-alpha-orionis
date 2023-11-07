@@ -12,6 +12,7 @@ import { searchID } from './middleware/searchID';
 import { verifyResetToken } from './middleware/verifyResetToken';
 import { validateEmail } from './middleware/validateEmail';
 import { WeatherController } from './controller/WeatherController';
+import { getWeatherMiddleware } from './middleware/getWeatherData';
 
 const router = Router();
 
@@ -20,7 +21,12 @@ router.get('/', new IndexController().info);
 router.post('/login', validateEmail, validateLogin, new AuthController().login);
 
 router.get('/dashboard', jwtMiddleware, new DashboardController().greet);
-router.get('/weather', jwtMiddleware, new WeatherController().getWeatherData);
+router.get(
+  '/weather',
+  jwtMiddleware,
+  getWeatherMiddleware,
+  new WeatherController().getWeatherData
+);
 
 router.post(
   '/forgot-password',

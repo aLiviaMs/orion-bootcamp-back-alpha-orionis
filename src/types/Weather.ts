@@ -3,21 +3,17 @@ export interface WeatherCard {
     celsius: {
       min: {
         value: number;
-        variation?: number;
       };
       max: {
         value: number;
-        variation?: number;
       };
     };
     fahrenheit: {
       min: {
         value: number;
-        variation?: number;
       };
       max: {
         value: number;
-        variation?: number;
       };
     };
   };

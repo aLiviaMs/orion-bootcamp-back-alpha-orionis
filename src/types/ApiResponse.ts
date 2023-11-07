@@ -9,7 +9,7 @@ export interface MarsSolData {
   max_temp: string;
 }
 
-interface SolTemperatureData {
+export interface SolTemperatureData {
   sol: string;
   date: string;
   minTemp: number;
