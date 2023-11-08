@@ -3,22 +3,32 @@ export interface WeatherCard {
     celsius: {
       min: {
         value: number;
+        variation: Variation;
       };
       max: {
         value: number;
+        variation: Variation;
       };
     };
     fahrenheit: {
       min: {
         value: number;
+        variation: Variation;
       };
       max: {
         value: number;
+        variation: Variation;
       };
     };
   };
   terrestrialDate: string;
   solDate: number;
+}
+
+export enum Variation {
+  Up = 'up',
+  Down = 'down',
+  Same = 'same'
 }
 
 export interface WeatherData {

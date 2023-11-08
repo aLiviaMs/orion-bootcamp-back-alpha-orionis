@@ -40,7 +40,7 @@ export const swaggerConfig: swaggerJSDoc.OAS3Options = {
                       type: 'number'
                     },
                     variation: {
-                      type: 'number'
+                      enum: ['up', 'down', 'same']
                     }
                   }
                 },
@@ -54,7 +54,7 @@ export const swaggerConfig: swaggerJSDoc.OAS3Options = {
                       type: 'number'
                     },
                     variation: {
-                      type: 'number'
+                      enum: ['up', 'down', 'same']
                     }
                   }
                 }

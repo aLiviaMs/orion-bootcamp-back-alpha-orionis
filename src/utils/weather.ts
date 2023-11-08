@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { SolData, SolTemperatureData } from '../types/ApiResponse';
-import { WeatherCard, WeatherData } from '../types/Weather';
+import { SolData } from '../types/ApiResponse';
+import { WeatherCard, WeatherData, Variation } from '../types/Weather';
 
 /**
  * Converte a temperatura de Celsius para Fahrenheit
@@ -38,34 +38,99 @@ export const calculateTemperatureVariation = (
 export const formatWeatherData = async (
   response: SolData
 ): Promise<WeatherData> => {
-  const weatherCards: WeatherCard[] = response.map(
-    (data: SolTemperatureData) => ({
+  if (response.length < 2) {
+    throw new Error('Não há dados suficientes para calcular a variação.');
+  }
+
+  const celsiusMaxVariation = calculateTemperatureVariation(
+    response[1].maxTemp,
+    response[0].maxTemp
+  );
+  const celsiusMinVariation = calculateTemperatureVariation(
+    response[1].minTemp,
+    response[0].minTemp
+  );
+
+  const maxVariation: Variation = getVariation(celsiusMaxVariation);
+  const minVariation: Variation = getVariation(celsiusMinVariation);
+
+  const weatherCards: WeatherCard[] = response.map((data, index) => {
+    const fahrenheitMinVariation: Variation =
+      index === 0
+        ? getVariation(
+            parseFloat(convertCelsiusToFahrenheit(data.minTemp).toFixed(1)) -
+              parseFloat(
+                convertCelsiusToFahrenheit(response[0].minTemp).toFixed(1)
+              )
+          )
+        : Variation.Same;
+    const fahrenheitMaxVariation: Variation =
+      index === 0
+        ? getVariation(
+            parseFloat(convertCelsiusToFahrenheit(data.maxTemp).toFixed(1)) -
+              parseFloat(
+                convertCelsiusToFahrenheit(response[0].maxTemp).toFixed(1)
+              )
+          )
+        : Variation.Same;
+
+    return {
       temperature: {
         celsius: {
           min: {
-            value: data.minTemp
+            value: data.minTemp,
+            variation: index === 0 ? minVariation : Variation.Same
           },
           max: {
-            value: data.maxTemp
+            value: data.maxTemp,
+            variation: index === 0 ? maxVariation : Variation.Same
           }
         },
         fahrenheit: {
           min: {
             value: parseFloat(
               convertCelsiusToFahrenheit(data.minTemp).toFixed(1)
-            )
+            ),
+            variation: fahrenheitMinVariation
           },
           max: {
             value: parseFloat(
               convertCelsiusToFahrenheit(data.maxTemp).toFixed(1)
-            )
+            ),
+            variation: fahrenheitMaxVariation
           }
         }
       },
-      terrestrialDate: data.date,
+      terrestrialDate: convertDateToISOString(data.date),
       solDate: parseInt(data.sol, 10)
-    })
-  );
+    };
+  });
 
   return { weatherCards };
+};
+
+/**
+ * Determina a direção da variação de acordo com um dado valor.
+ *
+ * @param {number} value - A diferença entre as duas medidas de temperatura.
+ * @returns {Variation} - A direção da variação de acordo com um dos valores ('Up', 'Down', ou 'Same').
+ */
+const getVariation = (value: number): Variation => {
+  if (value > 0) return Variation.Up;
+  else if (value < 0) return Variation.Down;
+  else return Variation.Same;
+};
+
+/**
+ * Converte uma string de data no formato 'YYYY-MM-DD' para uma string no formato ISO 8601.
+ *
+ * @param {string} dateString - A data a ser convertida.
+ * @returns {string} A string no formato ISO 8601 representando a data.
+ */
+const convertDateToISOString = (dateString: string): string => {
+  const date = new Date(dateString);
+
+  const isoString = date.toISOString();
+
+  return isoString;
 };
