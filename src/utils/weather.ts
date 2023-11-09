@@ -63,7 +63,7 @@ export const formatWeatherData = async (
                 convertCelsiusToFahrenheit(response[0].minTemp).toFixed(1)
               )
           )
-        : Variation.Same;
+        : Variation.NEUTRAL;
     const fahrenheitMaxVariation: Variation =
       index === 0
         ? getVariation(
@@ -72,18 +72,18 @@ export const formatWeatherData = async (
                 convertCelsiusToFahrenheit(response[0].maxTemp).toFixed(1)
               )
           )
-        : Variation.Same;
+        : Variation.NEUTRAL;
 
     return {
       temperature: {
         celsius: {
           min: {
             value: data.minTemp,
-            variation: index === 0 ? minVariation : Variation.Same
+            variation: index === 0 ? minVariation : Variation.NEUTRAL
           },
           max: {
             value: data.maxTemp,
-            variation: index === 0 ? maxVariation : Variation.Same
+            variation: index === 0 ? maxVariation : Variation.NEUTRAL
           }
         },
         fahrenheit: {
@@ -113,12 +113,12 @@ export const formatWeatherData = async (
  * Determina a direção da variação de acordo com um dado valor.
  *
  * @param {number} value - A diferença entre as duas medidas de temperatura.
- * @returns {Variation} - A direção da variação de acordo com um dos valores ('Up', 'Down', ou 'Same').
+ * @returns {Variation} - A direção da variação de acordo com um dos valores ('Higher', 'Lower', ou 'Neutral').
  */
 const getVariation = (value: number): Variation => {
-  if (value > 0) return Variation.Up;
-  else if (value < 0) return Variation.Down;
-  else return Variation.Same;
+  if (value > 0) return Variation.HIGHER;
+  else if (value < 0) return Variation.LOWER;
+  else return Variation.NEUTRAL;
 };
 
 /**

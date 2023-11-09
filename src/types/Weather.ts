@@ -26,9 +26,9 @@ export interface WeatherCard {
 }
 
 export enum Variation {
-  Up = 'up',
-  Down = 'down',
-  Same = 'same'
+  HIGHER = 'higher',
+  LOWER = 'lower',
+  NEUTRAL = 'neutral'
 }
 
 export interface WeatherData {
