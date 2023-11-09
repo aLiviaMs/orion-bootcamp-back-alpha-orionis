@@ -1,3 +1,5 @@
+import dotenv from 'dotenv';
+dotenv.config();
 import nodemailer, { SendMailOptions, SentMessageInfo } from 'nodemailer';
 import { TransportOptions } from '../types/User';
 
