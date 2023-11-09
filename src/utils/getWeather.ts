@@ -1,10 +1,9 @@
-import fetch from 'node-fetch';
 import {
   MarsSolData,
   MarsWeatherApiResponse,
   SolData
 } from '../types/ApiResponse';
-
+import axios from 'axios';
 /**
  * Asynchronously retrieves weather data from the provided URL and processes it to return the first 14 Martian solar days (Sols) of temperature data.
  *
@@ -19,11 +18,9 @@ import {
  * });
  */
 export const getWeatherHandler = async (url: string): Promise<SolData> => {
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error(`HTTP Error! Status: ${response.status}`);
-  }
-  const data: MarsWeatherApiResponse = await response.json();
+  const response = await axios.get<MarsWeatherApiResponse>(url);
+
+  const data: MarsWeatherApiResponse = response.data;
 
   const first14Soles: MarsSolData[] = data.soles.slice(0, 14);
 
