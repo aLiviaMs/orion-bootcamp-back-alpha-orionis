@@ -19,10 +19,10 @@ export const convertCelsiusToFahrenheit = (
  * @param past_temperature A temperatura anterior (°C ou °F)
  * @returns A diferença de temperatura na unidade que foi tratada
  */
-function calculateTemperatureVariation(
+export const calculateTemperatureVariation = (
   current_temperature: number,
   past_temperature: number
-): Variation {
+): Variation => {
   const difference = current_temperature - past_temperature;
 
   if (difference > 0) {
@@ -32,7 +32,7 @@ function calculateTemperatureVariation(
   } else {
     return Variation.NEUTRAL;
   }
-}
+};
 
 /**
  * Formata de forma assíncrona os dados que vem da API da NASA.
