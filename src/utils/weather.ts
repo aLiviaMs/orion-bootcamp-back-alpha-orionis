@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { SolData } from '../types/ApiResponse';
 import { WeatherCard, WeatherData, Variation } from '../types/Weather';
 
@@ -20,12 +19,20 @@ export const convertCelsiusToFahrenheit = (
  * @param past_temperature A temperatura anterior (°C ou °F)
  * @returns A diferença de temperatura na unidade que foi tratada
  */
-export const calculateTemperatureVariation = (
+function calculateTemperatureVariation(
   current_temperature: number,
   past_temperature: number
-): number => {
-  return current_temperature - past_temperature;
-};
+): Variation {
+  const difference = current_temperature - past_temperature;
+
+  if (difference > 0) {
+    return Variation.HIGHER;
+  } else if (difference < 0) {
+    return Variation.LOWER;
+  } else {
+    return Variation.NEUTRAL;
+  }
+}
 
 /**
  * Formata de forma assíncrona os dados que vem da API da NASA.
@@ -43,34 +50,31 @@ export const formatWeatherData = async (
   }
 
   const celsiusMaxVariation = calculateTemperatureVariation(
-    response[1].maxTemp,
-    response[0].maxTemp
+    response[0].maxTemp,
+    response[1].maxTemp
   );
   const celsiusMinVariation = calculateTemperatureVariation(
-    response[1].minTemp,
-    response[0].minTemp
+    response[0].minTemp,
+    response[1].minTemp
   );
 
-  const maxVariation: Variation = getVariation(celsiusMaxVariation);
-  const minVariation: Variation = getVariation(celsiusMinVariation);
-
   const weatherCards: WeatherCard[] = response.map((data, index) => {
-    const fahrenheitMinVariation: Variation =
+    const fahrenheitMinVariation =
       index === 0
-        ? getVariation(
-            parseFloat(convertCelsiusToFahrenheit(data.minTemp).toFixed(1)) -
-              parseFloat(
-                convertCelsiusToFahrenheit(response[0].minTemp).toFixed(1)
-              )
+        ? calculateTemperatureVariation(
+            parseFloat(convertCelsiusToFahrenheit(data.minTemp).toFixed(1)),
+            parseFloat(
+              convertCelsiusToFahrenheit(response[0].minTemp).toFixed(1)
+            )
           )
         : Variation.NEUTRAL;
-    const fahrenheitMaxVariation: Variation =
+    const fahrenheitMaxVariation =
       index === 0
-        ? getVariation(
-            parseFloat(convertCelsiusToFahrenheit(data.maxTemp).toFixed(1)) -
-              parseFloat(
-                convertCelsiusToFahrenheit(response[0].maxTemp).toFixed(1)
-              )
+        ? calculateTemperatureVariation(
+            parseFloat(convertCelsiusToFahrenheit(data.maxTemp).toFixed(1)),
+            parseFloat(
+              convertCelsiusToFahrenheit(response[0].maxTemp).toFixed(1)
+            )
           )
         : Variation.NEUTRAL;
 
@@ -79,11 +83,11 @@ export const formatWeatherData = async (
         celsius: {
           min: {
             value: data.minTemp,
-            variation: index === 0 ? minVariation : Variation.NEUTRAL
+            variation: index === 0 ? celsiusMinVariation : Variation.NEUTRAL
           },
           max: {
             value: data.maxTemp,
-            variation: index === 0 ? maxVariation : Variation.NEUTRAL
+            variation: index === 0 ? celsiusMaxVariation : Variation.NEUTRAL
           }
         },
         fahrenheit: {
@@ -107,18 +111,6 @@ export const formatWeatherData = async (
   });
 
   return { weatherCards };
-};
-
-/**
- * Determina a direção da variação de acordo com um dado valor.
- *
- * @param {number} value - A diferença entre as duas medidas de temperatura.
- * @returns {Variation} - A direção da variação de acordo com um dos valores ('Higher', 'Lower', ou 'Neutral').
- */
-const getVariation = (value: number): Variation => {
-  if (value > 0) return Variation.HIGHER;
-  else if (value < 0) return Variation.LOWER;
-  else return Variation.NEUTRAL;
 };
 
 /**
