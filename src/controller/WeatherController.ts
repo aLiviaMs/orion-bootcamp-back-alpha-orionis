@@ -50,12 +50,9 @@ export class WeatherController {
 
     const formattedData: WeatherData = await formatWeatherData(data);
 
-    return res
-      .status(200)
-      .header('Cache-Control', 'public, max-age=86400') // 24 horas
-      .json({
-        status: true,
-        data: formattedData
-      });
+    return res.status(200).json({
+      status: true,
+      data: formattedData
+    });
   };
 }
