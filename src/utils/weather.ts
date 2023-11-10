@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { SolData } from '../types/ApiResponse';
 import { WeatherCard, WeatherData, Variation } from '../types/Weather';
 
