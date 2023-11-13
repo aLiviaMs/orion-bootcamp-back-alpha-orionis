@@ -34,13 +34,28 @@ export const swaggerConfig: swaggerJSDoc.OAS3Options = {
                   type: 'object',
                   properties: {
                     min: {
-                      type: 'number'
+                      type: 'object',
+                      properties: {
+                        value: {
+                          type: 'number'
+                        },
+                        variation: {
+                          type: 'string',
+                          enum: ['higher', 'lower', 'neutral']
+                        }
+                      }
                     },
                     max: {
-                      type: 'number'
-                    },
-                    variation: {
-                      enum: ['higher', 'lower', 'neutral']
+                      type: 'object',
+                      properties: {
+                        value: {
+                          type: 'number'
+                        },
+                        variation: {
+                          type: 'string',
+                          enum: ['higher', 'lower', 'neutral']
+                        }
+                      }
                     }
                   }
                 },
@@ -48,13 +63,28 @@ export const swaggerConfig: swaggerJSDoc.OAS3Options = {
                   type: 'object',
                   properties: {
                     min: {
-                      type: 'number'
+                      type: 'object',
+                      properties: {
+                        value: {
+                          type: 'number'
+                        },
+                        variation: {
+                          type: 'string',
+                          enum: ['higher', 'lower', 'neutral']
+                        }
+                      }
                     },
                     max: {
-                      type: 'number'
-                    },
-                    variation: {
-                      enum: ['higher', 'lower', 'neutral']
+                      type: 'object',
+                      properties: {
+                        value: {
+                          type: 'number'
+                        },
+                        variation: {
+                          type: 'string',
+                          enum: ['higher', 'lower', 'neutral']
+                        }
+                      }
                     }
                   }
                 }
@@ -64,7 +94,8 @@ export const swaggerConfig: swaggerJSDoc.OAS3Options = {
               type: 'string'
             },
             solDate: {
-              type: 'number'
+              type: 'integer',
+              format: 'int32'
             }
           }
         },
