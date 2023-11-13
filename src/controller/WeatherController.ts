@@ -52,7 +52,7 @@ export class WeatherController {
 
     return res
       .status(200)
-      .header('Cache-Control', 'public, max-age=86400') // 24 horas
+      .header('Cache-Control', 'public, max-age=3600') // 1 hora
       .json({
         status: true,
         data: formattedData
