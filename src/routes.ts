@@ -13,11 +13,13 @@ import { verifyResetToken } from './middleware/verifyResetToken';
 import { validateEmail } from './middleware/validateEmail';
 import { WeatherController } from './controller/WeatherController';
 import { getWeatherMiddleware } from './middleware/getWeatherData';
+import { RegisterController } from './controller/RegisterController';
 
 const router = Router();
 
 router.get('/', new IndexController().info);
 
+router.post('/register', validateEmail, new RegisterController().register);
 router.post('/login', validateEmail, validateLogin, new AuthController().login);
 
 router.get('/dashboard', jwtMiddleware, new DashboardController().greet);
