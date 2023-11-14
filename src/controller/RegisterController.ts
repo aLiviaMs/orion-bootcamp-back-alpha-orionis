@@ -87,7 +87,8 @@ export class RegisterController {
    */
   register = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const { email, password } = req.body as RegisterRequestBody;
+      const { email, password, isSubscribed, isVerified } =
+        req.body as RegisterRequestBody;
 
       const UserRepository = MongoDBDataSource.getRepository(
         User
@@ -100,7 +101,13 @@ export class RegisterController {
         });
       }
 
-      await saveNewUser(email, password, UserRepository);
+      await saveNewUser(
+        email,
+        password,
+        isSubscribed,
+        isVerified,
+        UserRepository
+      );
 
       return res.status(200).json({
         status: true,

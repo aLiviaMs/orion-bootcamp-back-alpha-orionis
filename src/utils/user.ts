@@ -24,6 +24,8 @@ export const checkIfUserExists = async (
  * É feito um hash da senha antes de salvar no banco de dados.
  * @param {string} email - O email do usuário a ser salvo.
  * @param {string} password - A senha do usuário a ser salvo.
+ * @param {boolean} isSubscribed - Indica se o usuário está inscrito na newsletter ou não.
+ * @param {boolean} isVerified - Indica se o usuário está verificado ou não.
  * @param {Repository<User>} userRepository - A instância do repositório do usuário para
  * realizar operações no banco de dados.
  * @returns {Promise<User>} - Uma promise que retorna o usuário salvo no banco de dados.
@@ -31,9 +33,16 @@ export const checkIfUserExists = async (
 export const saveNewUser = async (
   email: string,
   password: string,
+  isSubscribed: boolean,
+  isVerified: boolean,
   userRepository: Repository<User>
 ): Promise<User> => {
   const hashedPassword = await hashPassword(password);
-  const newUser = userRepository.create({ email, password: hashedPassword });
+  const newUser = userRepository.create({
+    email,
+    password: hashedPassword,
+    isSubscribed,
+    isVerified
+  });
   return userRepository.save(newUser);
 };
