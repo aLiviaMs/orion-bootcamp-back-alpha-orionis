@@ -2,7 +2,7 @@ import { Repository } from 'typeorm';
 import { MongoDBDataSource } from '../config/database';
 import { User } from '../entity/User';
 import { Request, Response } from 'express';
-import { LoginRequestBody } from '../types/User';
+import { RegisterRequestBody } from '../types/User';
 import { checkIfUserExists, saveNewUser } from '../utils/user';
 
 export class RegisterController {
@@ -31,6 +31,16 @@ export class RegisterController {
    *                 type: string
    *                 format: password
    *                 description: A senha do usuário
+   *               isSubscribed:
+   *                 type: boolean
+   *                 description: Indica se o usuário está inscrito na newsletter ou não
+   *               isVerified:
+   *                 type: boolean
+   *                 description: Indica se o usuário está verificado ou não
+   *     produces:
+   *       - application/json
+   *     consumes:
+   *       - application/json
    *     responses:
    *       '200':
    *         description: Usuário cadastrado com sucesso
@@ -77,7 +87,7 @@ export class RegisterController {
    */
   register = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const { email, password } = req.body as LoginRequestBody;
+      const { email, password } = req.body as RegisterRequestBody;
 
       const UserRepository = MongoDBDataSource.getRepository(
         User
