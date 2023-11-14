@@ -1,9 +1,6 @@
-import { Repository } from 'typeorm';
-import { MongoDBDataSource } from '../config/database';
-import { User } from '../entity/User';
 import { Request, Response } from 'express';
 import { RegisterRequestBody } from '../types/User';
-import { checkIfUserExists, saveNewUser } from '../utils/user';
+import { UserRepository, checkIfUserExists, saveNewUser } from '../utils/user';
 
 export class RegisterController {
   /**
@@ -89,10 +86,6 @@ export class RegisterController {
     try {
       const { email, password, isSubscribed, isVerified } =
         req.body as RegisterRequestBody;
-
-      const UserRepository = MongoDBDataSource.getRepository(
-        User
-      ) as Repository<User>;
 
       if (await checkIfUserExists(email, UserRepository)) {
         return res.status(400).json({
