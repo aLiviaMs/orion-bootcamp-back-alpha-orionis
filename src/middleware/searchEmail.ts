@@ -18,25 +18,26 @@ export const searchEmail = async (
     });
   }
 
-  const emailErrorMessage: string =
-    'Ocorreu um erro durante o processamento da requisição.';
-  const emailErrorResponse: Response = res.status(400).json({
-    status: false,
-    data: {
-      message: emailErrorMessage
-    }
-  });
-
   try {
     const user: User = await findOne({ where: { email } });
 
     if (!user?._id) {
-      return emailErrorResponse;
+      return res.status(400).json({
+        status: false,
+        data: {
+          message: 'Ocorreu um erro durante o processamento da requisição.'
+        }
+      });
     }
 
     req.body.user = user;
   } catch (_err) {
-    return emailErrorResponse;
+    return res.status(400).json({
+      status: false,
+      data: {
+        message: 'Ocorreu um erro durante o processamento da requisição.'
+      }
+    });
   }
 
   next();

@@ -19,26 +19,27 @@ export const validateLogin = async (
     });
   }
 
-  const loginErrorMessage: string =
-    'E-mail ou senha incorretos. Tente novamente.';
-  const loginErrorResponse: Response = res.status(400).json({
-    status: false,
-    data: {
-      message: loginErrorMessage
-    }
-  });
-
   try {
     const user: User = await findOne({ where: { email } });
     const isValidPassword = await comparePasswords(password, user?.password);
 
     if (!isValidPassword) {
-      return loginErrorResponse;
+      return res.status(400).json({
+        status: false,
+        data: {
+          message: 'E-mail ou senha incorretos. Tente novamente.'
+        }
+      });
     }
 
     req.body.user = user;
   } catch (_err) {
-    return loginErrorResponse;
+    return res.status(400).json({
+      status: false,
+      data: {
+        message: 'Ocorreu um erro durante o processamento da requisição.'
+      }
+    });
   }
 
   next();
