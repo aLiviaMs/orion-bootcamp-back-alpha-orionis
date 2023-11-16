@@ -60,23 +60,9 @@ export const formatWeatherData = async (
 
   const weatherCards: WeatherCard[] = response.map((data, index) => {
     const fahrenheitMinVariation =
-      index === 0
-        ? calculateTemperatureVariation(
-            parseFloat(convertCelsiusToFahrenheit(data.minTemp).toFixed(1)),
-            parseFloat(
-              convertCelsiusToFahrenheit(response[0].minTemp).toFixed(1)
-            )
-          )
-        : Variation.NEUTRAL;
+      index === 0 ? celsiusMinVariation : Variation.NEUTRAL;
     const fahrenheitMaxVariation =
-      index === 0
-        ? calculateTemperatureVariation(
-            parseFloat(convertCelsiusToFahrenheit(data.maxTemp).toFixed(1)),
-            parseFloat(
-              convertCelsiusToFahrenheit(response[0].maxTemp).toFixed(1)
-            )
-          )
-        : Variation.NEUTRAL;
+      index === 0 ? celsiusMaxVariation : Variation.NEUTRAL;
 
     return {
       temperature: {
