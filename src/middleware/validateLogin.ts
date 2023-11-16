@@ -19,27 +19,26 @@ export const validateLogin = async (
     });
   }
 
+  const loginErrorMessage: string =
+    'E-mail ou senha incorretos. Tente novamente.';
+  const loginErrorResponse: Response = res.status(400).json({
+    status: false,
+    data: {
+      message: loginErrorMessage
+    }
+  });
+
   try {
     const user: User = await findOne({ where: { email } });
     const isValidPassword = await comparePasswords(password, user?.password);
 
     if (!isValidPassword) {
-      return res.status(400).json({
-        status: false,
-        data: {
-          message: 'A senha digitada está incorreta. Tente novamente.'
-        }
-      });
+      return loginErrorResponse;
     }
 
-    req.body.user ??= user;
+    req.body.user = user;
   } catch (_err) {
-    return res.status(400).json({
-      status: false,
-      data: {
-        message: 'Não foi possível encontrar sua conta.'
-      }
-    });
+    return loginErrorResponse;
   }
 
   next();

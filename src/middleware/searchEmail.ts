@@ -18,26 +18,25 @@ export const searchEmail = async (
     });
   }
 
+  const emailErrorMessage: string =
+    'Ocorreu um erro durante o processamento da requisição.';
+  const emailErrorResponse: Response = res.status(400).json({
+    status: false,
+    data: {
+      message: emailErrorMessage
+    }
+  });
+
   try {
     const user: User = await findOne({ where: { email } });
 
     if (!user?._id) {
-      return res.status(400).json({
-        status: false,
-        data: {
-          message: 'Não foi possível encontrar sua conta.'
-        }
-      });
+      return emailErrorResponse;
     }
 
-    req.body.user ??= user;
+    req.body.user = user;
   } catch (_err) {
-    return res.status(400).json({
-      status: false,
-      data: {
-        message: 'Não foi possível encontrar sua conta.'
-      }
-    });
+    return emailErrorResponse;
   }
 
   next();
