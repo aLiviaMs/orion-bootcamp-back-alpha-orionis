@@ -38,3 +38,10 @@ export interface StatusResponse {
     message: string;
   };
 }
+
+export interface RegisterRequestBody {
+  email: string;
+  password: string;
+  isSubscribed: boolean;
+  isVerified: boolean;
+}

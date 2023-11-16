@@ -10,4 +10,10 @@ export class User {
 
   @Column()
   password: string;
+
+  @Column()
+  isSubscribed: boolean;
+
+  @Column()
+  isVerified: boolean;
 }
