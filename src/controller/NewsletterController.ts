@@ -1,6 +1,7 @@
 import { User } from '../entity/User';
 import { Request, Response } from 'express';
 import { MongoDBDataSource } from '../config/database';
+import { UpdateResult } from 'typeorm';
 
 export class NewsletterController {
   /**
@@ -71,21 +72,21 @@ export class NewsletterController {
    *                       type: string
    *                       example: "Falha no banco de dados ao se inscrever na Newsletter."
    */
-  subscribe = (req: Request, res: Response): Response => {
+  subscribe = async (req: Request, res: Response): Promise<Response> => {
     const user: User = req.body.user;
     const errorMessage: string =
       'Ocorreu um erro ao cadastrar a newsletter! Tente mais tarde.';
 
-    const subscribedUser = {
+    const subscribedUser: User = {
       ...user,
       isSubscribed: true
     };
 
     const UserRepository = MongoDBDataSource.getRepository(User);
-    const savedSubscribedUser = UserRepository.update(
-      user._id,
-      subscribedUser
-    ).catch((_err) => null);
+    const savedSubscribedUser: UpdateResult | null =
+      await UserRepository.update(user._id, subscribedUser).catch(
+        (_err) => null
+      );
 
     if (!savedSubscribedUser) {
       return res.status(500).json({
@@ -168,8 +169,31 @@ export class NewsletterController {
    *                       example: "Falha no banco de dados ao cancelar a assinatura."
    */
   unsubscribe = (req: Request, res: Response): Response => {
+    const user: User = req.body.user;
     const token: string = req.params.token;
     const errorMessage: string = 'Ocorreu um erro ao cancelar a newsletter!';
+
+    if (!token) {
+      return res.status(400).json({
+        status: false,
+        data: {
+          message: errorMessage
+        }
+      });
+    }
+
+    const UserRepository = MongoDBDataSource.getRepository(User);
+
+    const unsubscribedUser: User = {
+      ...user,
+      isSubscribed: false
+    };
+
+
+
+
+
+
 
     return res.status(200).json({
       status: true,
