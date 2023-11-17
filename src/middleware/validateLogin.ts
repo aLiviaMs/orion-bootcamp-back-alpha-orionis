@@ -27,17 +27,17 @@ export const validateLogin = async (
       return res.status(400).json({
         status: false,
         data: {
-          message: 'A senha digitada está incorreta. Tente novamente.'
+          message: 'E-mail ou senha incorretos. Tente novamente.'
         }
       });
     }
 
-    req.body.user ??= user;
+    req.body.user = user;
   } catch (_err) {
     return res.status(400).json({
       status: false,
       data: {
-        message: 'Não foi possível encontrar sua conta.'
+        message: 'Ocorreu um erro durante o processamento da requisição.'
       }
     });
   }

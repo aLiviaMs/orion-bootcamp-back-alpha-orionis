@@ -19,7 +19,7 @@ services:
       DB_DATABASE: orion
       DB_CONNECTION_STRING: mongodb://orion_root:j5m966qp7jiypfda@orion-mongo:27017
       JWT_SECRET: AFdMvt5jwI5n9LNHN0MxPxLWm9nwtsb8M2Q9yYBYzbRGz03ris
-      FRONTEND_URL: http://localhost:8080
+      FRONTEND_URL: http://localhost:4200
     networks:
       - orion-connect
   
