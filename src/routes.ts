@@ -20,7 +20,12 @@ const router = Router();
 
 router.get('/', new IndexController().info);
 
-router.post('/register', validateEmail, new RegisterController().register);
+router.post(
+  '/register',
+  validateEmail,
+  validatePassword,
+  new RegisterController().register
+);
 router.post(
   '/login',
   validateEmail,
