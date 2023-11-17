@@ -58,4 +58,15 @@ router.post(
   new ResetPasswordController().resetPassword
 );
 
+router.post(
+  '/newsletter/',
+  validateEmail,
+  searchEmail,
+  new NewsletterController().subscribe
+);
+router.get(
+  '/newsletter/unsubscribe/:token',
+  new NewsletterController().unsubscribe
+);
+
 export default router;
