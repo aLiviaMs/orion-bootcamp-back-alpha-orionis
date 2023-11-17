@@ -25,17 +25,17 @@ export const searchEmail = async (
       return res.status(400).json({
         status: false,
         data: {
-          message: 'Não foi possível encontrar sua conta.'
+          message: 'Ocorreu um erro durante o processamento da requisição.'
         }
       });
     }
 
-    req.body.user ??= user;
+    req.body.user = user;
   } catch (_err) {
     return res.status(400).json({
       status: false,
       data: {
-        message: 'Não foi possível encontrar sua conta.'
+        message: 'Ocorreu um erro durante o processamento da requisição.'
       }
     });
   }
