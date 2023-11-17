@@ -94,7 +94,7 @@ export class ForgotPasswordController {
 
     const email: string = user?.email;
     const subject: string = 'Explorador Orion - Recuperação de Senha';
-    const resetURL: string = `${process.env.FRONTEND_URL}/reset-password/${user?._id}/${resetToken}`;
+    const resetURL: string = `${process.env.FRONTEND_URL}/auth/reset-password/${user?._id}/${resetToken}`;
     const emailContent: string = composeResetEmailContent(resetURL);
     const wasEmailSent: boolean = await sendEmail(email, subject, emailContent);
 

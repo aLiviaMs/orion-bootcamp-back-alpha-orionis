@@ -38,6 +38,19 @@ export class WeatherController {
    *                 message:
    *                   type: string
    *                   example: 'Erro ao receber os dados da API da NASA'
+   *       401:
+   *         description: Erro ao autenticar o usuário.
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 status:
+   *                   type: boolean
+   *                   example: false
+   *                 message:
+   *                   type: string
+   *                   example: 'Token inválido.'
    */
   getWeatherData = async (req: Request, res: Response): Promise<Response> => {
     if (!req.weatherData) {
@@ -52,7 +65,7 @@ export class WeatherController {
 
     return res
       .status(200)
-      .header('Cache-Control', 'public, max-age=86400') // 24 horas
+      .header('Cache-Control', 'public, max-age=3600') // 1 hora
       .json({
         status: true,
         data: formattedData

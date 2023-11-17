@@ -43,7 +43,7 @@ export const searchID = async (
     });
   }
 
-  req.body.user ??= user;
+  req.body.user = user;
 
   next();
 };

@@ -26,6 +26,7 @@ router.post(
   validatePassword,
   new RegisterController().register
 );
+
 router.post(
   '/login',
   validateEmail,
@@ -40,50 +41,6 @@ router.get(
   jwtMiddleware,
   getWeatherMiddleware,
   new WeatherController().getWeatherData
-);
-
-router.post(
-  '/forgot-password',
-  validateEmail,
-  searchEmail,
-  new ForgotPasswordController().forgotPassword
-);
-
-router.get(
-  '/reset-password/:id/:resetToken',
-  searchID,
-  verifyResetToken,
-  new ResetPasswordController().getResetToken
-);
-
-router.post(
-  '/reset-password',
-  validatePassword,
-  searchID,
-  verifyResetToken,
-  new ResetPasswordController().resetPassword
-);
-
-router.post(
-  '/forgot-password',
-  validateEmail,
-  searchEmail,
-  new ForgotPasswordController().forgotPassword
-);
-
-router.get(
-  '/reset-password/:id/:resetToken',
-  searchID,
-  verifyResetToken,
-  new ResetPasswordController().getResetToken
-);
-
-router.post(
-  '/reset-password',
-  validatePassword,
-  searchID,
-  verifyResetToken,
-  new ResetPasswordController().resetPassword
 );
 
 router.post(
