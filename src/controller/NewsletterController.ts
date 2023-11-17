@@ -1,4 +1,6 @@
+import { User } from '../entity/User';
 import { Request, Response } from 'express';
+import { MongoDBDataSource } from '../config/database';
 
 export class NewsletterController {
   /**
@@ -70,8 +72,29 @@ export class NewsletterController {
    *                       example: "Falha no banco de dados ao se inscrever na Newsletter."
    */
   subscribe = (req: Request, res: Response): Response => {
-    const email: string = req.body.email;
-    const errorMessage: string = 'Ocorreu um erro ao cadastrar a newsletter!';
+    const user: User = req.body.user;
+    const errorMessage: string =
+      'Ocorreu um erro ao cadastrar a newsletter! Tente mais tarde.';
+
+    const subscribedUser = {
+      ...user,
+      isSubscribed: true
+    };
+
+    const UserRepository = MongoDBDataSource.getRepository(User);
+    const savedSubscribedUser = UserRepository.update(
+      user._id,
+      subscribedUser
+    ).catch((_err) => null);
+
+    if (!savedSubscribedUser) {
+      return res.status(500).json({
+        status: false,
+        data: {
+          message: errorMessage
+        }
+      });
+    }
 
     return res.status(200).json({
       status: true,
