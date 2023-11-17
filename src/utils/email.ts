@@ -18,12 +18,13 @@ const transporter = nodemailer.createTransport({
 
 export const sendEmail = async (
   email: string,
+  subject: string,
   content: string
 ): Promise<boolean> => {
   const mailOptions: SendMailOptions = {
     from: 'alphaorionisservice@gmail.com',
     to: email,
-    subject: 'Explorador Orion - Recuperação de Senha',
+    subject: subject,
     html: content
   };
 

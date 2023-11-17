@@ -1,6 +1,9 @@
 import { Request, Response } from 'express';
 import { RegisterRequestBody } from '../types/User';
 import { UserRepository, checkIfUserExists, saveNewUser } from '../utils/user';
+import { sendEmail } from '../utils/email';
+import { composeRegisterEmailContent } from '../utils/emailTemplates/registerEmailContent';
+import { createJWT } from '../utils/auth';
 
 export class RegisterController {
   /**
@@ -8,6 +11,7 @@ export class RegisterController {
    * /register:
    *   post:
    *     summary: Cadastro de usuários
+   *     description: Registra um novo usuário e envia um email de verificação com um link contendo um token JWT.
    *     tags:
    *       - Register
    *     requestBody:
@@ -40,7 +44,9 @@ export class RegisterController {
    *       - application/json
    *     responses:
    *       '200':
-   *         description: Usuário cadastrado com sucesso
+   *         description: >
+   *           Usuário cadastrado com sucesso. Um email de verificação contendo um link com token JWT é enviado.
+   *           O usuário deve clicar no link para validar a conta.
    *         content:
    *           application/json:
    *             schema:
@@ -54,9 +60,10 @@ export class RegisterController {
    *                   properties:
    *                     message:
    *                       type: string
-   *                       example: "Usuário cadastrado com sucesso."
+   *                       example: "Sua conta foi criada com sucesso, para acessar valide a sua conta no seu e-mail"
    *       '400':
-   *         description: Usuário já cadastrado
+   *         description: >
+   *           Falha ao cadastrar usuário. Pode ser devido ao usuário já estar cadastrado ou falha ao enviar email de verificação.
    *         content:
    *           application/json:
    *             schema:
@@ -67,7 +74,7 @@ export class RegisterController {
    *                   example: false
    *                 message:
    *                   type: string
-   *                   example: "Usuário já cadastrado."
+   *                   example: "Não foi possível enviar o email de confirmação de cadastro."
    *       '500':
    *         description: Erro interno do servidor
    *         content:
@@ -90,11 +97,12 @@ export class RegisterController {
       if (await checkIfUserExists(email, UserRepository)) {
         return res.status(400).json({
           status: false,
-          message: 'Usuário já cadastrado.'
+          message:
+            'Houve um erro na criação da sua conta. Verifique se o seu e-mail já está correto.'
         });
       }
 
-      await saveNewUser(
+      const user = await saveNewUser(
         email,
         password,
         isSubscribed,
@@ -102,10 +110,35 @@ export class RegisterController {
         UserRepository
       );
 
+      const token = createJWT(user);
+
+      if (user) {
+        const email: string = user.email;
+        const subject: string = 'Explorador Orion - Bem-vindo!';
+        const confirmURL: string = `${process.env.FRONTEND_URL}/auth/login?token=${token}`;
+        const emailContent: string = composeRegisterEmailContent(confirmURL);
+        const wasEmailSent: boolean = await sendEmail(
+          email,
+          subject,
+          emailContent
+        );
+
+        if (!wasEmailSent) {
+          res.status(400).json({
+            status: false,
+            data: {
+              message:
+                'Não foi possível enviar o email de confirmação de cadastro.'
+            }
+          });
+        }
+      }
+
       return res.status(200).json({
         status: true,
         data: {
-          message: 'Usuário cadastrado com sucesso.'
+          message:
+            'Sua conta foi criada com sucesso, para acessar valide a sua conta no seu e-mail'
         }
       });
     } catch (error) {
