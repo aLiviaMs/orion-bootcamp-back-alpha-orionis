@@ -49,31 +49,26 @@ export const formatWeatherData = async (
     throw new Error('Não há dados suficientes para calcular a variação.');
   }
 
-  const celsiusMaxVariation = calculateTemperatureVariation(
+  const temperatureMaxVariation = calculateTemperatureVariation(
     response[0].maxTemp,
     response[1].maxTemp
   );
-  const celsiusMinVariation = calculateTemperatureVariation(
+  const temperatureMinVariation = calculateTemperatureVariation(
     response[0].minTemp,
     response[1].minTemp
   );
 
   const weatherCards: WeatherCard[] = response.map((data, index) => {
-    const fahrenheitMinVariation =
-      index === 0 ? celsiusMinVariation : Variation.NEUTRAL;
-    const fahrenheitMaxVariation =
-      index === 0 ? celsiusMaxVariation : Variation.NEUTRAL;
-
     return {
       temperature: {
         celsius: {
           min: {
             value: data.minTemp,
-            variation: index === 0 ? celsiusMinVariation : Variation.NEUTRAL
+            variation: index === 0 ? temperatureMinVariation : Variation.NEUTRAL
           },
           max: {
             value: data.maxTemp,
-            variation: index === 0 ? celsiusMaxVariation : Variation.NEUTRAL
+            variation: index === 0 ? temperatureMaxVariation : Variation.NEUTRAL
           }
         },
         fahrenheit: {
@@ -81,13 +76,13 @@ export const formatWeatherData = async (
             value: parseFloat(
               convertCelsiusToFahrenheit(data.minTemp).toFixed(1)
             ),
-            variation: fahrenheitMinVariation
+            variation: index === 0 ? temperatureMinVariation : Variation.NEUTRAL
           },
           max: {
             value: parseFloat(
               convertCelsiusToFahrenheit(data.maxTemp).toFixed(1)
             ),
-            variation: fahrenheitMaxVariation
+            variation: index === 0 ? temperatureMaxVariation : Variation.NEUTRAL
           }
         }
       },
