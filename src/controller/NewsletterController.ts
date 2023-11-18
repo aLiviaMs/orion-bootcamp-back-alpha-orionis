@@ -169,32 +169,6 @@ export class NewsletterController {
    *                       example: "Falha no banco de dados ao cancelar a assinatura."
    */
   unsubscribe = (req: Request, res: Response): Response => {
-    const user: User = req.body.user;
-    const token: string = req.params.token;
-    const errorMessage: string = 'Ocorreu um erro ao cancelar a newsletter!';
-
-    if (!token) {
-      return res.status(400).json({
-        status: false,
-        data: {
-          message: errorMessage
-        }
-      });
-    }
-
-    const UserRepository = MongoDBDataSource.getRepository(User);
-
-    const unsubscribedUser: User = {
-      ...user,
-      isSubscribed: false
-    };
-
-
-
-
-
-
-
     return res.status(200).json({
       status: true,
       data: {
