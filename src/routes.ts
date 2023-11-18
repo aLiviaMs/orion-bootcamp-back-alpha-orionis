@@ -8,6 +8,7 @@ import { jwtMiddleware } from './middleware/jwtMiddleware';
 import { validateLogin } from './middleware/validateLogin';
 import { validatePassword } from './middleware/validatePassword';
 import { searchEmail } from './middleware/searchEmail';
+import { searchEmailWithPassword } from './middleware/searchEmailWithPassword';
 import { searchID } from './middleware/searchID';
 import { verifyResetToken } from './middleware/verifyResetToken';
 import { validateEmail } from './middleware/validateEmail';
@@ -25,7 +26,14 @@ router.post(
   validatePassword,
   new RegisterController().register
 );
-router.post('/login', validateEmail, validateLogin, new AuthController().login);
+
+router.post(
+  '/login',
+  validateEmail,
+  searchEmailWithPassword,
+  validateLogin,
+  new AuthController().login
+);
 
 router.get('/dashboard', jwtMiddleware, new DashboardController().greet);
 router.get(
@@ -38,7 +46,7 @@ router.get(
 router.post(
   '/forgot-password',
   validateEmail,
-  searchEmail,
+  searchEmailWithPassword,
   new ForgotPasswordController().forgotPassword
 );
 
