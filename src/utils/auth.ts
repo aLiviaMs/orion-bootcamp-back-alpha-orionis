@@ -2,6 +2,7 @@ import { User } from './../entity/User';
 import bcrypt from 'bcrypt';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { MongoDBDataSource } from '../config/database';
+import { SearchEmailResponse } from '../types/User';
 
 /**
  * Cria o hash de autenticação do usuário
@@ -63,7 +64,8 @@ export const hashPassword = async (password: string): Promise<string> => {
 export const comparePasswords = async (
   password: string,
   hash: string
-): Promise<boolean> => bcrypt.compare(password, hash);
+): Promise<boolean> =>
+  await bcrypt.compare(password, hash).catch((_err) => false);
 
 /**
  * Busca um usuário no banco de dados a partir do email
@@ -86,4 +88,36 @@ export const findOne = async ({
   } catch (error) {
     return null;
   }
+};
+
+/**
+ * Procura por um usuário a partir de um E-mail
+ * @param email O E-mail informado
+ * @param message Uma mensagem personalizada a ser retornada
+ * @returns O usuário encontrado ou uma mensagem informando o ocorrido
+ */
+export const searchUserEmail = async (
+  email: string,
+  message: string
+): Promise<SearchEmailResponse> => {
+  if (!email) {
+    return {
+      status: false,
+      message: 'Email não informado.'
+    };
+  }
+
+  const user: User | null = await findOne({ where: { email } });
+
+  if (!user?._id) {
+    return {
+      status: false,
+      message
+    };
+  }
+
+  return {
+    status: true,
+    user
+  };
 };
