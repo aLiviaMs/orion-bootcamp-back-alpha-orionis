@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { findOne } from '../utils/auth';
-import { User } from '../entity/User';
+import { searchUserEmail } from '../utils/auth';
+import { SearchEmailResponse } from '../types/User';
 
 export const searchEmail = async (
   req: Request,
@@ -9,35 +9,15 @@ export const searchEmail = async (
 ): Promise<Response | void> => {
   const email: string = req.body.email;
 
-  if (!email) {
-    return res.status(400).json({
-      status: false,
-      data: {
-        message: 'Email não informado.'
-      }
-    });
-  }
+  const searchEmailResponse: SearchEmailResponse = await searchUserEmail(
+    email,
+    'Ocorreu um erro durante o processamento da requisição.'
+  );
 
-  try {
-    const user: User = await findOne({ where: { email } });
-
-    if (!user?._id) {
-      return res.status(400).json({
-        status: false,
-        data: {
-          message: 'Ocorreu um erro durante o processamento da requisição.'
-        }
-      });
-    }
-
-    req.body.user = user;
-  } catch (_err) {
-    return res.status(400).json({
-      status: false,
-      data: {
-        message: 'Ocorreu um erro durante o processamento da requisição.'
-      }
-    });
+  if (searchEmailResponse.status) {
+    req.body.user = searchEmailResponse.user;
+  } else {
+    return res.status(400).json(searchEmailResponse);
   }
 
   next();
