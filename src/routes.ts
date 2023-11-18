@@ -14,7 +14,9 @@ import { verifyResetToken } from './middleware/verifyResetToken';
 import { validateEmail } from './middleware/validateEmail';
 import { WeatherController } from './controller/WeatherController';
 import { getWeatherMiddleware } from './middleware/getWeatherData';
+import { NewsletterController } from './controller/NewsletterController';
 import { RegisterController } from './controller/RegisterController';
+import { verifyUser } from './middleware/verifyUserMiddleware';
 
 const router = Router();
 
@@ -32,6 +34,7 @@ router.post(
   validateEmail,
   searchEmailWithPassword,
   validateLogin,
+  verifyUser,
   new AuthController().login
 );
 
@@ -63,6 +66,16 @@ router.post(
   searchID,
   verifyResetToken,
   new ResetPasswordController().resetPassword
+);
+
+router.post(
+  '/newsletter/',
+  validateEmail,
+  new NewsletterController().subscribe
+);
+router.get(
+  '/newsletter/unsubscribe/:token',
+  new NewsletterController().unsubscribe
 );
 
 export default router;
