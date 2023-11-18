@@ -1,6 +1,14 @@
 import { User } from '../entity/User';
 import { Repository } from 'typeorm';
 import { hashPassword } from './auth';
+import { MongoDBDataSource } from '../config/database';
+
+/**
+ * A instância do repositório do usuário para realizar operações no banco de dados.
+ */
+export const UserRepository = MongoDBDataSource.getRepository(
+  User
+) as Repository<User>;
 
 /**
  * Checa de forma assíncrona se um usuário, através de seu email, já existe no
@@ -17,6 +25,23 @@ export const checkIfUserExists = async (
 ): Promise<boolean> => {
   const existingUser: User = await userRepository.findOne({ where: { email } });
   return !!existingUser;
+};
+
+/**
+ * Checa de forma assíncrona se um usuário, através de seu email, já está com o status verificado no
+ * banco de dados.
+ * @param {string} email - O email do usuário a ser checado.
+ * @param {Repository<User>} userRepository - A instância do repositório do usuário para
+ * realizar operações no banco de dados.
+ * @returns {Promise<boolean>} Uma promise que retorna true se o usuário está verificado, caso
+ * contrário retorna false.
+ */
+export const checkIfUserIsVerified = async (
+  email: string,
+  userRepository: Repository<User>
+): Promise<boolean> => {
+  const existingUser: User = await userRepository.findOne({ where: { email } });
+  return existingUser ? existingUser.isVerified : false;
 };
 
 /**
