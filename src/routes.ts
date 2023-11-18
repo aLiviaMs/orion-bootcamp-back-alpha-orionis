@@ -49,7 +49,7 @@ router.get(
 router.post(
   '/forgot-password',
   validateEmail,
-  searchEmailWithPassword,
+  searchEmail,
   new ForgotPasswordController().forgotPassword
 );
 
