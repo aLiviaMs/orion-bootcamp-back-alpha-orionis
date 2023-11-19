@@ -1,4 +1,8 @@
 import { Request, Response } from 'express';
+import { MongoDBDataSource } from '../config/database';
+import { UserRepository } from '../utils/user';
+import { UpdateResult } from 'typeorm';
+import { User } from '../entity/User';
 
 export class NewsletterController {
   /**
@@ -69,9 +73,30 @@ export class NewsletterController {
    *                       type: string
    *                       example: "Falha no banco de dados ao se inscrever na Newsletter."
    */
-  subscribe = (req: Request, res: Response): Response => {
-    const email: string = req.body.email;
-    const errorMessage: string = 'Ocorreu um erro ao cadastrar a newsletter!';
+  subscribe = async (req: Request, res: Response): Promise<Response> => {
+    const user: User = req.body.user;
+    const errorMessage: string =
+      'Ocorreu um erro ao cadastrar a newsletter! Tente mais tarde.';
+
+    const subscribedUser: User = {
+      ...user,
+      isSubscribed: true
+    };
+
+    const UserRepository = MongoDBDataSource.getRepository(User);
+    const savedSubscribedUser: UpdateResult | null =
+      await UserRepository.update(user._id, subscribedUser).catch(
+        (_err) => null
+      );
+
+    if (!savedSubscribedUser) {
+      return res.status(500).json({
+        status: false,
+        data: {
+          message: errorMessage
+        }
+      });
+    }
 
     return res.status(200).json({
       status: true,
@@ -144,9 +169,28 @@ export class NewsletterController {
    *                       type: string
    *                       example: "Falha no banco de dados ao cancelar a assinatura."
    */
-  unsubscribe = (req: Request, res: Response): Response => {
-    const token: string = req.params.token;
+  unsubscribe = async (req: Request, res: Response): Promise<Response> => {
+    const user: User = req.body.user;
     const errorMessage: string = 'Ocorreu um erro ao cancelar a newsletter!';
+
+    const unsubscribedUser: User = {
+      ...user,
+      isSubscribed: false
+    };
+
+    const savedUnsubscribedUser: UpdateResult | null =
+      await UserRepository.update(user._id, unsubscribedUser).catch(
+        (_err) => null
+      );
+
+    if (!savedUnsubscribedUser) {
+      return res.status(500).json({
+        status: false,
+        data: {
+          message: errorMessage
+        }
+      });
+    }
 
     return res.status(200).json({
       status: true,
