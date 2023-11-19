@@ -16,6 +16,7 @@ import { getWeatherMiddleware } from './middleware/getWeatherData';
 import { NewsletterController } from './controller/NewsletterController';
 import { RegisterController } from './controller/RegisterController';
 import { verifyUser } from './middleware/verifyUserMiddleware';
+import { verifyUnsubToken } from './middleware/verifyUnsubToken';
 
 const router = Router();
 
@@ -69,10 +70,13 @@ router.post(
 router.post(
   '/newsletter/',
   validateEmail,
+  searchEmail,
   new NewsletterController().subscribe
 );
+
 router.get(
   '/newsletter/unsubscribe/:token',
+  verifyUnsubToken,
   new NewsletterController().unsubscribe
 );
 
