@@ -5,7 +5,6 @@ import { sendEmail } from '../utils/email';
 import { composeRegisterEmailContent } from '../utils/emailTemplates/registerEmailContent';
 import { createJWT } from '../utils/auth';
 
-
 export class RegisterController {
   /**
    * @swagger
