@@ -1,9 +1,9 @@
 export interface NewsletterBloggerAPIResponse {
-    items: NewsletterBloggerItem[];
+  items: NewsletterBloggerItem[];
 }
 
 export interface NewsletterBloggerItem {
-    title: string;
-    url: string;
-    content: string;
+  title: string;
+  url: string;
+  content: string;
 }
