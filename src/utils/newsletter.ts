@@ -61,8 +61,6 @@ export const generateNewsItemsList = async (): Promise<string[] | null> => {
 export const getUnsubTokens = async (
   subscribedUsersList: User[]
 ): Promise<UnsubscriptionToken[] | null> => {
-  console.log('sub: ', subscribedUsersList);
-
   const unsubTokenList: UnsubscriptionToken[] | null =
     await UnsubTokenRepo.find({}).catch((_err) => null);
 
@@ -87,8 +85,6 @@ export const getUnsubTokens = async (
   const savedUnsubTokens: UnsubscriptionToken[] = await UnsubTokenRepo.save(
     newUnsubTokenList
   ).catch((_err) => null);
-
-  console.log(savedUnsubTokens);
 
   const allUnsubTokens: UnsubscriptionToken[] =
     unsubTokenList?.concat(savedUnsubTokens);
@@ -118,10 +114,7 @@ export const sendBulkNewsletterEmails = async (
   allUnsubTokens: UnsubscriptionToken[]
 ): Promise<boolean[]> => {
   const newsItemsList: string[] | null = await generateNewsItemsList().catch(
-    (_err) => {
-      console.log('err: ', _err);
-      return null;
-    }
+    (_err) => null
   );
   const newsItemsListString: string = newsItemsList?.join('');
 
@@ -132,8 +125,6 @@ export const sendBulkNewsletterEmails = async (
       const currentUnsubToken: UnsubscriptionToken | undefined =
         allUnsubTokens.find((token) => token._id === user._id);
       const unsubToken: string | null = currentUnsubToken?.hash;
-
-      console.log('unsubToken', unsubToken);
 
       if (!unsubToken) return false;
 
