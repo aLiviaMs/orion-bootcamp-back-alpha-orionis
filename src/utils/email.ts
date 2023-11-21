@@ -12,18 +12,19 @@ const transporter = nodemailer.createTransport({
     clientSecret: process.env.OAUTH_CLIENT_SECRET,
     refreshToken: process.env.OAUTH_REFRESH_TOKEN
   },
-  debug: true,
-  logger: true
+  debug: process.env.NODE_ENV === 'development',
+  logger: process.env.NODE_ENV === 'development'
 } as TransportOptions);
 
 export const sendEmail = async (
   email: string,
+  subject: string,
   content: string
 ): Promise<boolean> => {
   const mailOptions: SendMailOptions = {
     from: 'alphaorionisservice@gmail.com',
     to: email,
-    subject: 'Explorador Orion - Recuperação de Senha',
+    subject,
     html: content
   };
 
