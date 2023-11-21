@@ -14,7 +14,7 @@ interface JwtPayload {
 export class UserController {
   /**
    * @swagger
-   * /user-verification
+   * /user-verification:
    *    post:
    *     summary: Verifica o email do usuário
    *     description: >
