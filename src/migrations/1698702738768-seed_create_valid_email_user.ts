@@ -8,7 +8,7 @@ export class CreateUserWithValidEmail1698702738768
       email: 'explorador-orion@proton.me',
       password: '$2a$12$ANoifDVbjR4X2S0cVVPREO9heDFT43AAbv8g4dIXYl945VeWoOUty',
       isSubscribed: false,
-      isVerifed: true
+      isVerified: true
     });
     await queryRunner.manager.save('User', user);
   }
