@@ -7,6 +7,12 @@ import { generateTokenAndHash, hashToken } from './recovery';
 import { ObjectId as MongoID } from 'mongodb';
 
 /**
+ * Instância do repositório de tokens de cancelamento de assinatura de Newsletter para agilizar operações de banco de dados.
+ */
+export const UnsubTokenRepo: Repository<UnsubscriptionToken> =
+  MongoDBDataSource.getMongoRepository(UnsubscriptionToken);
+
+/**
  * Procura um usuário a partir de um Token de cancelamento de Newsletter
  * @param token O token de cancelamento de assinatura
  * @returns O usuário caso o encontre ou null caso contrário
@@ -16,10 +22,7 @@ export const findUserByUnsubToken = async (
 ): Promise<User | null> => {
   const hash: string = hashToken(token);
 
-  const UsubRepository: Repository<UnsubscriptionToken> =
-    MongoDBDataSource.getRepository(UnsubscriptionToken);
-
-  const usubTokenDB: UnsubscriptionToken | null = await UsubRepository.findOne({
+  const usubTokenDB: UnsubscriptionToken | null = await UnsubTokenRepo.findOne({
     where: { hash }
   }).catch((_err) => null);
 
