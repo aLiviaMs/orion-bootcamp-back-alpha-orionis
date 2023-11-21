@@ -11,6 +11,7 @@ export class NewsletterController {
    *   post:
    *     summary: Newsletter
    *     tags: [Newsletter]
+   *     description: Inscreve o usuário na Newsletter
    *     consumes:
    *       - application/json
    *     produces:
@@ -111,7 +112,8 @@ export class NewsletterController {
    * /newsletter/unsubscribe/{token}:
    *   get:
    *     tags: [Newsletter]
-   *     summary: Cancelar assinatura da newsletter
+   *     summary: Cancelar assinatura da Newsletter
+   *     description: Cancela a assinatura do usuário da Newsletter
    *     parameters:
    *       - in: path
    *         name: token
