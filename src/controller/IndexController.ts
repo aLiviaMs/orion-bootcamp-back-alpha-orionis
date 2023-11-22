@@ -8,8 +8,8 @@ export class IndexController {
    *     summary: Informações da API
    *     tags: [Index]
    *     responses:
-   *       301:
-   *         description: 'Redirecionamento para a documentação da API'
+   *       200:
+   *         description: 'Informações da API em formato JSON seguindo o modelo da OpenAPI.'
    */
   info = (_req: Request, res: Response) => {
     return res.status(301).redirect('/swagger.json');
