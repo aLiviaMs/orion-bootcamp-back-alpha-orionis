@@ -73,21 +73,36 @@ export class UserController {
       });
 
       if (!user) {
-        return res.status(400).send('Token inválido ou usuário não encontrado');
+        return res.status(400).json({
+          status: false,
+          data: { message: 'Token inválido ou usuário não encontrado' }
+        });
       }
 
       user.isVerified = true;
       await UserRepository.save(user);
 
-      return res.status(200).send('Email verificado com sucesso');
+      return res.status(200).json({
+        status: true,
+        data: { message: 'Email verificado com sucesso' }
+      });
     } catch (error) {
       console.error('Verification Error:', error);
       if (error instanceof jwt.TokenExpiredError) {
-        return res.status(400).send('Token expirado');
+        return res.status(400).json({
+          status: false,
+          data: { message: 'Token expirado' }
+        });
       } else if (error instanceof jwt.JsonWebTokenError) {
-        return res.status(400).send('Token inválido');
+        return res.status(400).json({
+          status: false,
+          data: { message: 'Token inválido' }
+        });
       } else {
-        return res.status(500).send('Erro interno do servidor');
+        return res.status(500).json({
+          status: false,
+          data: { message: 'Erro interno do servidor' }
+        });
       }
     }
   };
