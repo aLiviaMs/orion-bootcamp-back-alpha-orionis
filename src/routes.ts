@@ -8,6 +8,7 @@ import { jwtMiddleware } from './middleware/jwtMiddleware';
 import { validateLogin } from './middleware/validateLogin';
 import { validatePassword } from './middleware/validatePassword';
 import { searchEmail } from './middleware/searchEmail';
+import { searchEmailWithPassword } from './middleware/searchEmailWithPassword';
 import { searchID } from './middleware/searchID';
 import { verifyResetToken } from './middleware/verifyResetToken';
 import { validateEmail } from './middleware/validateEmail';
@@ -17,18 +18,12 @@ import { NewsletterController } from './controller/NewsletterController';
 import { RegisterController } from './controller/RegisterController';
 import { verifyUser } from './middleware/verifyUserMiddleware';
 import { verifyUnsubToken } from './middleware/verifyUnsubToken';
+import { UserController } from './controller/UserController';
+import { searchEmailNewsletter } from './middleware/searchEmailNewsletter';
 
 const router = Router();
 
 router.get('/', new IndexController().info);
-
-router.post(
-  '/login',
-  validateEmail,
-  validateLogin,
-  verifyUser,
-  new AuthController().login
-);
 
 router.post(
   '/register',
@@ -36,6 +31,17 @@ router.post(
   validatePassword,
   new RegisterController().register
 );
+
+router.post(
+  '/login',
+  validateEmail,
+  searchEmailWithPassword,
+  validateLogin,
+  verifyUser,
+  new AuthController().login
+);
+
+router.post('/user-verification', new UserController().verify);
 
 router.get('/dashboard', jwtMiddleware, new DashboardController().greet);
 router.get(
@@ -70,7 +76,7 @@ router.post(
 router.post(
   '/newsletter/',
   validateEmail,
-  searchEmail,
+  searchEmailNewsletter,
   new NewsletterController().subscribe
 );
 

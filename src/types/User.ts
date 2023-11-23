@@ -39,6 +39,12 @@ export interface StatusResponse {
   };
 }
 
+export interface SearchEmailResponse {
+  status: boolean;
+  message?: string;
+  user?: User;
+}
+
 export interface RegisterRequestBody {
   email: string;
   password: string;

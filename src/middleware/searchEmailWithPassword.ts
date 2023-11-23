@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { searchUserEmail } from '../utils/auth';
 import { SearchEmailResponse } from '../types/User';
 
-export const searchEmail = async (
+export const searchEmailWithPassword = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -11,7 +11,7 @@ export const searchEmail = async (
 
   const searchEmailResponse: SearchEmailResponse = await searchUserEmail(
     email,
-    'Ocorreu um erro durante o processamento da requisição.'
+    'E-mail ou senha incorretos. Tente novamente.'
   );
 
   if (searchEmailResponse.status) {
