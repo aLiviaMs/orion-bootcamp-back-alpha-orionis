@@ -115,7 +115,7 @@ export class RegisterController {
       if (user) {
         const email: string = user.email;
         const subject: string = 'Explorador Orion - Bem-vindo!';
-        const confirmURL: string = `${process.env.FRONTEND_URL}/auth/login?token=${token}`;
+        const confirmURL: string = `${process.env.FRONTEND_URL}/auth/login/${token}`;
         const emailContent: string = composeRegisterEmailContent(confirmURL);
         const wasEmailSent: boolean = await sendEmail(
           email,
