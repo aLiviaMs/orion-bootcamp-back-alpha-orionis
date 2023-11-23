@@ -8,6 +8,7 @@ import { jwtMiddleware } from './middleware/jwtMiddleware';
 import { validateLogin } from './middleware/validateLogin';
 import { validatePassword } from './middleware/validatePassword';
 import { searchEmail } from './middleware/searchEmail';
+import { searchEmailWithPassword } from './middleware/searchEmailWithPassword';
 import { searchID } from './middleware/searchID';
 import { verifyResetToken } from './middleware/verifyResetToken';
 import { validateEmail } from './middleware/validateEmail';
@@ -22,18 +23,19 @@ const router = Router();
 router.get('/', new IndexController().info);
 
 router.post(
-  '/login',
-  validateEmail,
-  validateLogin,
-  verifyUser,
-  new AuthController().login
-);
-
-router.post(
   '/register',
   validateEmail,
   validatePassword,
   new RegisterController().register
+);
+
+router.post(
+  '/login',
+  validateEmail,
+  searchEmailWithPassword,
+  validateLogin,
+  verifyUser,
+  new AuthController().login
 );
 
 router.get('/dashboard', jwtMiddleware, new DashboardController().greet);
