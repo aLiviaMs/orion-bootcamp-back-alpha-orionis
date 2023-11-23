@@ -17,6 +17,7 @@ import { getWeatherMiddleware } from './middleware/getWeatherData';
 import { NewsletterController } from './controller/NewsletterController';
 import { RegisterController } from './controller/RegisterController';
 import { verifyUser } from './middleware/verifyUserMiddleware';
+import { UserController } from './controller/UserController';
 import { searchEmailNewsletter } from './middleware/searchEmailNewsletter';
 
 const router = Router();
@@ -38,6 +39,8 @@ router.post(
   verifyUser,
   new AuthController().login
 );
+
+router.post('/user-verification', new UserController().verify);
 
 router.get('/dashboard', jwtMiddleware, new DashboardController().greet);
 router.get(
