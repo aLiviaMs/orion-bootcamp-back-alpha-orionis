@@ -9,7 +9,10 @@ import { MongoDBDataSource } from '../config/database';
  * @param isRememberEnabled Opção de lembrar sessão do usuário
  * @returns O hash de autenticação
  */
-export const createJWT = (user: User, isRememberEnabled: boolean): string => {
+export const createJWT = (
+  user: User,
+  isRememberEnabled: boolean = false
+): string => {
   const expiry: string = isRememberEnabled ? '48h' : '2h';
   const token: string = jwt.sign(
     {
