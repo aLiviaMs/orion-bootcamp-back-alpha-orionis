@@ -19,7 +19,12 @@ module.exports = {
   rules: {
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
-    '@typescript-eslint/no-unused-vars': 'warn',
+    '@typescript-eslint/no-unused-vars': [
+      'warn',
+      {
+        argsIgnorePattern: '^err|^error|^_'
+      }
+    ],
     'prettier/prettier': [
       'error',
       {
