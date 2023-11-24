@@ -12,8 +12,8 @@ const transporter = nodemailer.createTransport({
     clientSecret: process.env.OAUTH_CLIENT_SECRET,
     refreshToken: process.env.OAUTH_REFRESH_TOKEN
   },
-  debug: true,
-  logger: true
+  debug: process.env.NODE_ENV === 'development',
+  logger: process.env.NODE_ENV === 'development'
 } as TransportOptions);
 
 export const sendEmail = async (
@@ -24,7 +24,7 @@ export const sendEmail = async (
   const mailOptions: SendMailOptions = {
     from: 'alphaorionisservice@gmail.com',
     to: email,
-    subject: subject,
+    subject,
     html: content
   };
 
