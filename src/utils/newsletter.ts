@@ -38,9 +38,10 @@ export const getBloggerFilteredURL = (rangeInDays: number = 1) => {
 export const generateNewsItemsList = async (): Promise<string[] | null> => {
   const filteredBloggerURL: string = getBloggerFilteredURL(1);
 
-  const res: AxiosResponse<NewsletterBloggerAPIResponse> =
-    await axios.get(filteredBloggerURL);
-  const postsList: NewsletterBloggerItem[] = res.data.items;
+  const res: AxiosResponse<NewsletterBloggerAPIResponse> | null = await axios
+    .get(filteredBloggerURL)
+    .catch((err) => null);
+  const postsList: NewsletterBloggerItem[] = res?.data?.items;
 
   const newsItems: string[] = postsList?.map((post) => {
     const $ = cheerio.load(post.content);
