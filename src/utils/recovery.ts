@@ -5,31 +5,28 @@ import { MongoDBDataSource } from '../config/database';
 import { ObjectId as MongoID } from 'mongodb';
 
 /**
- * Gera um token de recuperação de senha e o hash do token.
- * @returns O token de recuperação de senha e o hash do token.
+ * Gera um token de 128 bits e o hash do token.
+ * @returns O token e o hash do token.
  */
-export const generateResetTokenAndHash = (): {
-  resetToken: string;
-  resetHash: string;
+export const generateTokenAndHash = (): {
+  token: string;
+  hash: string;
 } => {
-  const resetToken: string = crypto.randomBytes(16).toString('hex');
-  const resetHash: string = hashToken(resetToken);
+  const token: string = crypto.randomBytes(16).toString('hex');
+  const hash: string = hashToken(token);
 
-  return { resetToken, resetHash };
+  return { token, hash };
 };
 
 /**
  * Gera o hash de um token de recuperação de senha.
- * @param resetToken O token de recuperação de senha.
+ * @param token O token de recuperação de senha.
  * @returns O hash do token de recuperação de senha.
  */
-export const hashToken = (resetToken: string): string => {
-  const resetHash: string = crypto
-    .createHash('sha256')
-    .update(resetToken)
-    .digest('hex');
+export const hashToken = (token: string): string => {
+  const hash: string = crypto.createHash('sha256').update(token).digest('hex');
 
-  return resetHash;
+  return hash;
 };
 
 /**

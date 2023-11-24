@@ -5,7 +5,7 @@ import { MongoDBDataSource } from '../config/database';
 import { Repository } from 'typeorm';
 import {
   createResetTokenDBObject,
-  generateResetTokenAndHash
+  generateTokenAndHash
 } from '../utils/recovery';
 import { sendEmail } from '../utils/email';
 import { composeResetEmailContent } from '../utils/emailTemplates/resetPasswordEmailContent';
@@ -67,13 +67,13 @@ export class ForgotPasswordController {
    */
   forgotPassword = async (req: Request, res: Response) => {
     const user: User = req.body.user;
-    const { resetToken, resetHash } = generateResetTokenAndHash();
+    const { token, hash } = generateTokenAndHash();
 
     const resetTokenRepository: Repository<ResetToken> =
       MongoDBDataSource.getRepository(ResetToken);
 
     const resetTokenDBObject: ResetToken = createResetTokenDBObject(
-      resetHash,
+      hash,
       user?._id
     );
 
@@ -93,8 +93,8 @@ export class ForgotPasswordController {
     }
 
     const email: string = user?.email;
+    const resetURL: string = `${process.env.FRONTEND_URL}/auth/reset-password/${user?._id}/${token}`;
     const subject: string = 'Explorador Orion - Recuperação de Senha';
-    const resetURL: string = `${process.env.FRONTEND_URL}/auth/reset-password/${user?._id}/${resetToken}`;
     const emailContent: string = composeResetEmailContent(resetURL);
     const wasEmailSent: boolean = await sendEmail(email, subject, emailContent);
 
