@@ -22,7 +22,7 @@ export const composeNewsletterEmailContent = (
     return null;
   }
 
-  const isScriptPresent: boolean = newsItemsList.search('<script') !== -1;
+  const isScriptPresent: boolean = newsItemsList?.search('<script') !== -1;
   if (isScriptPresent) return null;
 
   const emailContent: string = newsletterHtml

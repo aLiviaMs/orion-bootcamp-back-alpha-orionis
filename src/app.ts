@@ -6,10 +6,16 @@ import swaggerJSDoc from 'swagger-jsdoc';
 import { MongoDBDataSource } from './config/database';
 import { swaggerConfig } from './config/swagger';
 import routes from './routes';
+import cron from 'node-cron';
+import { sendNewsletter } from './utils/newsletter';
 
 MongoDBDataSource.initialize()
   .then(() => {
     console.log('Database initialized!');
+    cron.schedule('0 11 * * *', sendNewsletter, {
+      scheduled: true,
+      timezone: 'America/Sao_Paulo'
+    });
   })
   .catch((err) => {
     console.error('Database Error: ', err);
