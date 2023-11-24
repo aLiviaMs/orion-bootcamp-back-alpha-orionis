@@ -1,6 +1,9 @@
 import { composeNewsletterEmailContent } from './emailTemplates/newsletterEmailContent';
 import { UnsubscriptionToken } from '../entity/UnsubscriptionToken';
-import { NewsletterBloggerAPIResponse } from '../types/Newsletter';
+import {
+  NewsletterBloggerAPIResponse,
+  NewsletterBloggerItem
+} from '../types/Newsletter';
 import { generateTokenAndHash } from './recovery';
 import { UnsubTokenRepo } from './subscription';
 import axios, { AxiosResponse } from 'axios';
@@ -37,11 +40,11 @@ export const generateNewsItemsList = async (): Promise<string[] | null> => {
 
   const res: AxiosResponse<NewsletterBloggerAPIResponse> =
     await axios.get(filteredBloggerURL);
-  const postsList = res.data.items;
+  const postsList: NewsletterBloggerItem[] = res.data.items;
 
   const newsItems: string[] = postsList?.map((post) => {
     const $ = cheerio.load(post.content);
-    const postSummary: string = $('.post-resume').text();
+    const postSummary: string = $('.content-resume').text();
 
     const postNewsItem: string = `<div class="news-item" style="margin: 20px 0; padding: 10px; border: 1px solid #ddd;">
        <h2><a href="${post.url}">${post.title}</a></h2>
@@ -136,6 +139,8 @@ export const sendBulkNewsletterEmails = async (
         unsubscribeURL,
         newsItemsListString
       );
+
+      if (!content) return false;
 
       const wasEmailSent: boolean = await sendEmail(email, subject, content);
       return wasEmailSent;
