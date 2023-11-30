@@ -91,8 +91,8 @@ export class RegisterController {
    */
   register = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const { email, password, isSubscribed, isVerified } =
-        req.body as RegisterRequestBody;
+      const { email, password, isSubscribed } = req.body as RegisterRequestBody;
+      const isVerified = false;
 
       if (await checkIfUserExists(email, UserRepository)) {
         return res.status(400).json({
