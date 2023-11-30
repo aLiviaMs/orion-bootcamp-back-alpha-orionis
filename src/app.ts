@@ -8,6 +8,7 @@ import { swaggerConfig } from './config/swagger';
 import routes from './routes';
 import cron from 'node-cron';
 import { sendNewsletter } from './utils/newsletter';
+import { invalidJSONHandler } from './middleware/invalidJSONHandler';
 
 MongoDBDataSource.initialize()
   .then(() => {
@@ -25,6 +26,7 @@ const app = express();
 
 app.use(helmet());
 app.use(express.json());
+app.use(invalidJSONHandler);
 app.use(cors({ origin: true }));
 app.use(routes);
 
