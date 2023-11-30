@@ -39,24 +39,51 @@ export class UserController {
    *       '200':
    *         description: Email verificado com sucesso.
    *         content:
-   *           text/plain:
+   *           application/json:
    *             schema:
-   *               type: string
-   *               example: Email verificado com sucesso
+   *               type: object
+   *               properties:
+   *                 status:
+   *                   type: boolean
+   *                   example: true
+   *                 data:
+   *                   type: object
+   *                   properties:
+   *                     message:
+   *                       type: string
+   *                       example: Email verificado com sucesso
    *       '400':
    *         description: Token inválido ou expirado, ou usuário não encontrado.
    *         content:
-   *           text/plain:
+   *           application/json:
    *             schema:
-   *               type: string
-   *               example: Token inválido ou usuário não encontrado
+   *               type: object
+   *               properties:
+   *                 status:
+   *                   type: boolean
+   *                   example: false
+   *                 data:
+   *                   type: object
+   *                   properties:
+   *                     message:
+   *                       type: string
+   *                       example: Token inválido ou usuário não encontrado
    *       '500':
    *         description: Erro interno do servidor.
    *         content:
-   *           text/plain:
+   *           application/json:
    *             schema:
-   *               type: string
-   *               example: Erro interno do servidor
+   *               type: object
+   *               properties:
+   *                 status:
+   *                   type: boolean
+   *                   example: false
+   *                 data:
+   *                   type: object
+   *                   properties:
+   *                     message:
+   *                       type: string
+   *                       example: Erro interno do servidor
    */
   verify = async (req: Request, res: Response): Promise<Response> => {
     try {
