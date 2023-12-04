@@ -114,7 +114,9 @@ export const swaggerConfig: swaggerJSDoc.OAS3Options = {
           type: 'object',
           properties: {
             status: {
-              type: 'boolean'
+              type: 'boolean',
+              description:
+                'Indica se a requisição foi bem sucedida. `true` para sucesso e `false` para erro.'
             },
             data: {
               $ref: '#/components/schemas/WeatherData'

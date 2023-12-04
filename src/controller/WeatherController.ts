@@ -20,11 +20,7 @@ export class WeatherController {
    *           application/json:
    *              schema:
    *               type: object
-   *               properties:
-   *                 weatherCards:
-   *                   type: array
-   *                   items:
-   *                     $ref: '#/components/schemas/WeatherCard'
+   *               $ref: '#/components/schemas/WeatherResponse'
    *       400:
    *         description: Erro ao receber os dados da API da NASA.
    *         content:
@@ -34,9 +30,11 @@ export class WeatherController {
    *               properties:
    *                 status:
    *                   type: boolean
+   *                   description: Status da requisição. `false` indica que a requisição falhou.
    *                   example: false
    *                 message:
    *                   type: string
+   *                   description: Mensagem de erro.
    *                   example: 'Erro ao receber os dados da API da NASA'
    *       401:
    *         description: Erro ao autenticar o usuário.
@@ -47,9 +45,11 @@ export class WeatherController {
    *               properties:
    *                 status:
    *                   type: boolean
+   *                   description: Status da requisição. `false` indica que a requisição falhou.
    *                   example: false
    *                 message:
    *                   type: string
+   *                   description: Mensagem de erro.
    *                   example: 'Token inválido.'
    */
   getWeatherData = async (req: Request, res: Response): Promise<Response> => {

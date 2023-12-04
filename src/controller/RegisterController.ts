@@ -51,12 +51,14 @@ export class RegisterController {
    *               properties:
    *                 status:
    *                   type: boolean
+   *                   description: Status da requisição. `true` indica que a requisição foi bem sucedida.
    *                   example: true
    *                 data:
    *                   type: object
    *                   properties:
    *                     message:
    *                       type: string
+   *                       description: Mensagem de sucesso.
    *                       example: "Sua conta foi criada com sucesso, para acessar valide a sua conta no seu e-mail"
    *       '400':
    *         description: >
@@ -68,9 +70,11 @@ export class RegisterController {
    *               properties:
    *                 status:
    *                   type: boolean
+   *                   description: Status da requisição. `false` indica que a requisição falhou.
    *                   example: false
    *                 message:
    *                   type: string
+   *                   description: Mensagem de erro.
    *                   example: "Não foi possível enviar o email de confirmação de cadastro."
    *       '500':
    *         description: Erro interno do servidor
@@ -81,9 +85,11 @@ export class RegisterController {
    *               properties:
    *                 status:
    *                   type: boolean
+   *                   description: Status da requisição. `false` indica que a requisição falhou.
    *                   example: false
    *                 message:
    *                   type: string
+   *                   description: Mensagem de erro.
    *                   example: "Houve um erro ao cadastrar o usuário."
    */
   register = async (req: Request, res: Response): Promise<Response> => {

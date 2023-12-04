@@ -35,7 +35,8 @@ export class ResetPasswordController {
    *               properties:
    *                 status:
    *                   type: boolean
-   *                   description: Status da requisição
+   *                   description: Status da requisição. `true` indica que a requisição foi bem sucedida.
+   *                   example: true
    *                 data:
    *                   type: object
    *                   properties:
@@ -54,7 +55,7 @@ export class ResetPasswordController {
    *               properties:
    *                 status:
    *                   type: boolean
-   *                   description: Status da requisição
+   *                   description: Status da requisição. `false` indica que a requisição falhou.
    *                   example: false
    *                 data:
    *                   type: object
@@ -62,6 +63,7 @@ export class ResetPasswordController {
    *                     message:
    *                       type: string
    *                       description: Mensagem de erro
+   *                       example: Token de recuperação de senha inválido
    *       400:
    *         description: ID de usuário inválido
    *         content:
@@ -71,7 +73,7 @@ export class ResetPasswordController {
    *               properties:
    *                 status:
    *                   type: boolean
-   *                   description: Status da requisição
+   *                   description: Status da requisição. `false` indica que a requisição falhou.
    *                   example: false
    *                 data:
    *                   type: object
@@ -79,6 +81,7 @@ export class ResetPasswordController {
    *                     message:
    *                       type: string
    *                       description: Mensagem de erro
+   *                       example: ID de usuário inválido
    */
   getResetToken = async (req: Request, res: Response): Promise<Response> => {
     const userID: ObjectId = convertToObjectID(req.params.id);
@@ -119,15 +122,26 @@ export class ResetPasswordController {
    *         application/json:
    *           schema:
    *             type: object
+   *             required:
+   *               - resetToken
+   *               - password
+   *               - confirmPassword
+   *               - id
    *             properties:
    *               resetToken:
    *                 type: string
+   *                 description: Token de recuperação de senha
    *               password:
    *                 type: string
+   *                 format: password
+   *                 description: Nova senha do usuário
    *               confirmPassword:
    *                 type: string
+   *                 format: password
+   *                 description: Confirmação da nova senha do usuário.
    *               id:
    *                 type: string
+   *                 description: ID do usuário
    *     responses:
    *       200:
    *         description: Senha alterada com sucesso.
@@ -138,13 +152,15 @@ export class ResetPasswordController {
    *               properties:
    *                 status:
    *                   type: boolean
-   *                   description: Booleano que indica se a requisição foi bem-sucedida
+   *                   description: Booleano que indica se a requisição foi bem-sucedida.
+   *                   example: true
    *                 data:
    *                   type: object
    *                   properties:
    *                     message:
    *                       type: string
    *                       description: Mensagem de sucesso.
+   *                       example: Senha atualizada com sucesso.
    *       400:
    *         description: Requisição inválida.
    *         content:
@@ -154,7 +170,7 @@ export class ResetPasswordController {
    *               properties:
    *                 status:
    *                   type: boolean
-   *                   description: Status da requisição
+   *                   description: Status da requisição. `false` indica que a requisição falhou.
    *                   example: false
    *                 data:
    *                   type: object
@@ -162,6 +178,7 @@ export class ResetPasswordController {
    *                     message:
    *                       type: string
    *                       description: Mensagem de erro.
+   *                       example: Não foi possível atualizar a senha.
    */
   resetPassword = async (req: Request, res: Response): Promise<Response> => {
     const { password, confirmPassword, id } =
