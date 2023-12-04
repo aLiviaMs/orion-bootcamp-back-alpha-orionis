@@ -134,7 +134,7 @@ export const sendBulkNewsletterEmails = async (
 
       const email: string = user.email;
       const subject: string = 'Explorando Marte - Newsletter';
-      const unsubscribeURL: string = `${process.env.FRONTEND_URL}/newsletter/unsubscribe/${unsubToken}`;
+      const unsubscribeURL: string = `${process.env.FRONTEND_URL}/auth/newsletter/unsubscribe/${unsubToken}`;
 
       const content: string = composeNewsletterEmailContent(
         unsubscribeURL,
