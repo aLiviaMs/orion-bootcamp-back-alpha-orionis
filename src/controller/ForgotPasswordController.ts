@@ -27,9 +27,13 @@ export class ForgotPasswordController {
    *         application/json:
    *           schema:
    *             type: object
+   *             required:
+   *               - email
    *             properties:
    *               email:
    *                 type: string
+   *                 format: email
+   *                 description: Email do usuário cadastrado e verificado.
    *     responses:
    *       200:
    *         description: E-mail de redefinição de senha enviado com sucesso.
@@ -40,13 +44,15 @@ export class ForgotPasswordController {
    *               properties:
    *                 status:
    *                   type: boolean
-   *                   description: Status da requisição
+   *                   description: Status da requisição. `true` indica que a requisição foi bem sucedida.
+   *                   example: true
    *                 data:
    *                   type: object
    *                   properties:
    *                     message:
    *                       type: string
    *                       description: Mensagem de sucesso.
+   *                       example: E-mail de redefinição de senha enviado com sucesso.
    *       400:
    *         description: Requisição inválida ou usuário não encontrado.
    *         content:
@@ -56,7 +62,7 @@ export class ForgotPasswordController {
    *               properties:
    *                 status:
    *                   type: boolean
-   *                   description: Status da requisição
+   *                   description: Status da requisição. `false` indica que a requisição falhou.
    *                   example: false
    *                 data:
    *                   type: object
@@ -64,6 +70,7 @@ export class ForgotPasswordController {
    *                     message:
    *                       type: string
    *                       description: Mensagem de erro.
+   *                       example: Não foi possível gerar o token de recuperação de senha.
    */
   forgotPassword = async (req: Request, res: Response) => {
     const user: User = req.body.user;

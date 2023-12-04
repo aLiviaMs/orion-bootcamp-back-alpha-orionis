@@ -45,12 +45,14 @@ export class UserController {
    *               properties:
    *                 status:
    *                   type: boolean
+   *                   description: Status da requisição. `true` indica que a requisição foi bem sucedida.
    *                   example: true
    *                 data:
    *                   type: object
    *                   properties:
    *                     message:
    *                       type: string
+   *                       description: Mensagem de sucesso.
    *                       example: Email verificado com sucesso
    *       '400':
    *         description: Token inválido ou expirado, ou usuário não encontrado.
@@ -61,12 +63,14 @@ export class UserController {
    *               properties:
    *                 status:
    *                   type: boolean
+   *                   description: Status da requisição. `false` indica que a requisição falhou.
    *                   example: false
    *                 data:
    *                   type: object
    *                   properties:
    *                     message:
    *                       type: string
+   *                       description: Mensagem de erro.
    *                       example: Token inválido ou usuário não encontrado
    *       '500':
    *         description: Erro interno do servidor.
@@ -77,12 +81,14 @@ export class UserController {
    *               properties:
    *                 status:
    *                   type: boolean
+   *                   description: Status da requisição. `false` indica que a requisição falhou.
    *                   example: false
    *                 data:
    *                   type: object
    *                   properties:
    *                     message:
    *                       type: string
+   *                       description: Mensagem de erro.
    *                       example: Erro interno do servidor
    */
   verify = async (req: Request, res: Response): Promise<Response> => {

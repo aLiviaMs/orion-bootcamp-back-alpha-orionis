@@ -22,9 +22,13 @@ export class NewsletterController {
    *        application/json:
    *          schema:
    *            type: object
+   *            required:
+   *              - email
    *            properties:
    *              email:
    *                type: string
+   *                format: email
+   *                description: Email do usuário cadastrado.
    *     responses:
    *       '200':
    *         description: 'Requisição executada com sucesso'
@@ -35,11 +39,14 @@ export class NewsletterController {
    *               properties:
    *                 status:
    *                   type: boolean
+   *                   description: 'Status da requisição. `true` indica que a requisição foi bem sucedida.'
+   *                   example: true
    *                 data:
    *                   type: object
    *                   properties:
    *                     message:
    *                       type: string
+   *                       description: 'Mensagem de sucesso.'
    *                       example: "E-mail inscrito na Newsletter!"
    *       '400':
    *         description: 'Requisição inválida'
@@ -50,12 +57,14 @@ export class NewsletterController {
    *               properties:
    *                 status:
    *                   type: boolean
+   *                   description: 'Status da requisição. `false` indica que a requisição falhou.'
    *                   example: false
    *                 data:
    *                   type: object
    *                   properties:
    *                     message:
    *                       type: string
+   *                       description: 'Mensagem de erro.'
    *                       example: "Formato de email inválido."
    *       '500':
    *         description: Falha no banco de dados
@@ -66,12 +75,14 @@ export class NewsletterController {
    *               properties:
    *                 status:
    *                   type: boolean
+   *                   description: 'Status da requisição. `false` indica que a requisição falhou.'
    *                   example: false
    *                 data:
    *                   type: object
    *                   properties:
    *                     message:
    *                       type: string
+   *                       description: 'Mensagem de erro.'
    *                       example: "Falha no banco de dados ao se inscrever na Newsletter."
    */
   subscribe = async (req: Request, res: Response): Promise<Response> => {
@@ -113,7 +124,7 @@ export class NewsletterController {
    *   get:
    *     tags: [Newsletter]
    *     summary: Cancelar assinatura da Newsletter
-   *     description: Cancela a assinatura do usuário da Newsletter
+   *     description: Cancela a assinatura do usuário da Newsletter a partir de um token enviado via email
    *     parameters:
    *       - in: path
    *         name: token
@@ -131,12 +142,14 @@ export class NewsletterController {
    *               properties:
    *                 status:
    *                   type: boolean
+   *                   description: Status da requisição. `true` indica que a requisição foi bem sucedida.
    *                   example: true
    *                 data:
    *                   type: object
    *                   properties:
    *                     message:
    *                       type: string
+   *                       description: Mensagem de sucesso.
    *                       example: "Assinatura de newsletter cancelada."
    *       '400':
    *         description: Requisição inválida
@@ -147,12 +160,14 @@ export class NewsletterController {
    *               properties:
    *                 status:
    *                   type: boolean
+   *                   description: Status da requisição. `false` indica que a requisição falhou.
    *                   example: false
    *                 data:
    *                   type: object
    *                   properties:
    *                     message:
    *                       type: string
+   *                       description: Mensagem de erro.
    *                       example: "Erro ao cancelar a assinatura da newsletter."
    *       '500':
    *         description: Falha no banco de dados
@@ -163,12 +178,14 @@ export class NewsletterController {
    *               properties:
    *                 status:
    *                   type: boolean
+   *                   description: Status da requisição. `false` indica que a requisição falhou.
    *                   example: false
    *                 data:
    *                   type: object
    *                   properties:
    *                     message:
    *                       type: string
+   *                       description: Mensagem de erro.
    *                       example: "Falha no banco de dados ao cancelar a assinatura."
    */
   unsubscribe = async (req: Request, res: Response): Promise<Response> => {

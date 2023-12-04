@@ -8,6 +8,7 @@ export class AuthController {
    * /login:
    *   post:
    *     summary: Login de usuários
+   *     description: Realiza o acesso de usuários cadastrados e verificados ao sistema. Responde com um token JWT, podendo valer por 48 horas caso `isRememberEnabled` seja `true`, ou por 2 horas caso contrário.
    *     tags:
    *       - Auth
    *     requestBody:
@@ -16,15 +17,21 @@ export class AuthController {
    *         application/json:
    *           schema:
    *             type: object
+   *             required:
+   *               - email
+   *               - password
    *             properties:
    *               email:
    *                 type: string
+   *                 format: email
+   *                 description: Email do usuário cadastrado e verificado
    *               password:
    *                 type: string
+   *                 format: password
+   *                 description: Senha do usuário
    *               isRememberEnabled:
-   *                 required: false
    *                 type: boolean
-   *                 description: Se o usuário deseja permanecer logado
+   *                 description: Se o usuário deseja permanecer logado.
    *     responses:
    *       '200':
    *         description: Requisição realizada com sucesso
@@ -35,11 +42,14 @@ export class AuthController {
    *               properties:
    *                 status:
    *                   type: boolean
+   *                   description: Status da requisição. `true` indica que a requisição foi bem sucedida.
    *                   example: true
    *                 data:
    *                   type: object
-   *                   description: Resposta JSON contendo o token de autenticação
-   *                   example: { token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c" }
+   *                   properties:
+   *                     token:
+   *                       type: string
+   *                       description: Token de autenticação
    *       '400':
    *         description: Requisição inválida
    *         content:
@@ -49,11 +59,15 @@ export class AuthController {
    *               properties:
    *                 status:
    *                   type: boolean
+   *                   description: Status da requisição. `false` indica que a requisição falhou.
    *                   example: false
    *                 data:
    *                   type: object
-   *                   description: Resposta JSON contendo a mensagem de erro
-   *                   example: { message: "Não foi possível encontrar sua conta." }
+   *                   properties:
+   *                     message:
+   *                       type: string
+   *                       description: Mensagem de erro.
+   *                       example: "Email ou senha incorretos."
    */
 
   login = async (req: Request, res: Response): Promise<Response> => {
