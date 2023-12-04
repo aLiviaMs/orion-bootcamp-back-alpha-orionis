@@ -22,7 +22,7 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': [
       'warn',
       {
-        argsIgnorePattern: '^err|^error|^_'
+        argsIgnorePattern: '^err$|^error$|^_'
       }
     ],
     'prettier/prettier': [
