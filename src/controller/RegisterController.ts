@@ -35,9 +35,6 @@ export class RegisterController {
    *               isSubscribed:
    *                 type: boolean
    *                 description: Indica se o usuário está inscrito na newsletter ou não
-   *               isVerified:
-   *                 type: boolean
-   *                 description: Indica se o usuário está verificado ou não
    *     produces:
    *       - application/json
    *     consumes:

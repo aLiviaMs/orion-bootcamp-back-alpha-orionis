@@ -49,5 +49,4 @@ export interface RegisterRequestBody {
   email: string;
   password: string;
   isSubscribed: boolean;
-  isVerified: boolean;
 }
