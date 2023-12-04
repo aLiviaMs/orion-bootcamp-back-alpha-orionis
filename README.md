@@ -66,24 +66,12 @@ Guarde este token em um bloco de notas para uso posterior. Ele terá validade de
 
 Aqui já é possível testar com informações erradas, basta modificar o e-mail ou senha para checar as respectivas repostas de e-mail ou senha errados.
 
-Com o token _em mãos_, é possível testar o dashboard. Para isso, na seção de Dashboard clique no cadeado e cole o token de autenticação JWT da mesma forma que veio na resposta, clique em Authorize e depois Close (nota: não é necessário adicionar _Bearer_. Isso é automaticamente anexado pelo Swagger UI).
+Com o token _em mãos_, é possível testar rotas protegidas. Para isso, na seção de uma rota protegida, ou em _Authorize_ no topo da página, clique no cadeado e cole o token de autenticação JWT da mesma forma que veio na resposta, clique em Authorize e depois Close (nota: não é necessário adicionar _Bearer_. Isso é automaticamente anexado pelo Swagger UI).
 
-Agora apenas siga a sequência padrão de Try it out e Execute. O Header Authorization será enviado junto à requisição.
-
-A resposta virá da seguinte forma:
-```json
-{
-  "status": true,
-  "data": {
-    "message": "Olá, email@dele.aqui!"
-  }
-}
-```
-
-Onde o e-mail apresentado foi extraído diretamente do token, que carrega por si só algumas informações do usuário.
+Agora apenas siga a sequência padrão de `Try it out` e `Execute`. O Header Authorization será enviado junto à requisição.
 
 Neste ponto também é possível testar tokens inválidos.
-Para usar outro token, acesse o cadeado novamente e aperte Logout, liberando assim espaço para inserção de outro JWT.
+Para usar outro token, acesse o cadeado novamente e aperte _Logout_, liberando assim espaço para inserção de outro JWT.
 
 #### Acessos:
 - URL base: http://localhost:4444
