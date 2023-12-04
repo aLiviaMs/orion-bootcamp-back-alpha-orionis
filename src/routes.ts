@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import { IndexController } from './controller/IndexController';
 import { AuthController } from './controller/AuthController';
-import { DashboardController } from './controller/DashboardController';
 import { ForgotPasswordController } from './controller/ForgotPasswordController';
 import { ResetPasswordController } from './controller/ResetPasswordController';
 import { jwtMiddleware } from './middleware/jwtMiddleware';
@@ -43,7 +42,6 @@ router.post(
 
 router.post('/user-verification', new UserController().verify);
 
-router.get('/dashboard', jwtMiddleware, new DashboardController().greet);
 router.get(
   '/weather',
   jwtMiddleware,
