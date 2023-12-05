@@ -1,6 +1,7 @@
 # Folders
 /dist
 /node_modules
+/coverage
 
 # environment variables
 .env
