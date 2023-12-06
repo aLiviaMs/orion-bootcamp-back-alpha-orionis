@@ -9,35 +9,47 @@ jest.mock('nodemailer', () => ({
 
 const mockedSendMail = nodemailer.createTransport().sendMail as jest.Mock;
 
-it('deve enviar email', async () => {
-  mockedSendMail.mockResolvedValue({
-    accepted: ['teste@examplo.com']
+describe('sendEmail', () => {
+  let consoleSpy: jest.SpyInstance;
+
+  beforeAll(() => {
+    consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
   });
 
-  const result: boolean = await sendEmail(
-    'endereço@exemplo.com',
-    'Assunto Teste',
-    '<p>Email de Teste</p>'
-  );
+  afterAll(() => {
+    consoleSpy.mockRestore();
+  });
 
-  expect(result).toBe(true);
-  expect(mockedSendMail).toHaveBeenCalledWith(
-    expect.objectContaining({
-      to: 'endereço@exemplo.com',
-      subject: 'Assunto Teste',
-      html: '<p>Email de Teste</p>'
-    })
-  );
-});
+  it('deve enviar email', async () => {
+    mockedSendMail.mockResolvedValue({
+      accepted: ['teste@examplo.com']
+    });
 
-it('deve retornar erro ao enviar email', async () => {
-  mockedSendMail.mockRejectedValue(new Error('Erro ao enviar email'));
+    const result: boolean = await sendEmail(
+      'endereço@exemplo.com',
+      'Assunto Teste',
+      '<p>Email de Teste</p>'
+    );
 
-  const result: boolean = await sendEmail(
-    'endereço@exemplo.com',
-    'Assunto Teste',
-    '<p>Email de Teste</p>'
-  );
+    expect(result).toBe(true);
+    expect(mockedSendMail).toHaveBeenCalledWith(
+      expect.objectContaining({
+        to: 'endereço@exemplo.com',
+        subject: 'Assunto Teste',
+        html: '<p>Email de Teste</p>'
+      })
+    );
+  });
 
-  expect(result).toBe(false);
+  it('deve retornar erro ao enviar email', async () => {
+    mockedSendMail.mockRejectedValue(new Error('Erro ao enviar email'));
+
+    const result: boolean = await sendEmail(
+      'endereço@exemplo.com',
+      'Assunto Teste',
+      '<p>Email de Teste</p>'
+    );
+
+    expect(result).toBe(false);
+  });
 });

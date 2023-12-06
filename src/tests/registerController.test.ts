@@ -48,6 +48,12 @@ describe('RegisterController', () => {
       isVerified: false,
       _id: new ObjectId()
     };
+
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 
   it('deve retornar um erro se o usuário já existe', async () => {
